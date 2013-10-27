@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="dexedLibs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/twitter4j-examples-3.0.4-cbd0aa16656492d0445acd0788f34a6d.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/android-support-v4-861cbae645e47b4a99319c95823bceab.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/twitter4j-core-3.0.4-eabeaa57be53ebed655f837de8ae5563.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/twitter4j-async-3.0.4-c526d201d0fa575a9cc6b245595caa5e.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/twitter4j-stream-3.0.4-72883002adeb757aff706b4389d4a5aa.jar!/" />
+      <root url="jar://$PROJECT_DIR$/bin/dexedLibs/twitter4j-media-support-3.0.4-ddf5f32a3423312b3e669a3a1a39e94a.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
