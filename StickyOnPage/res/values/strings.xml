@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sticky on Page!</string>
+    <string name="app_id">421390317961031</string>
+    <string name="get_started">To get started,\nlogin using Facebook or Twitter</string>
+    <string name="settings">Settings</string>
+    <string name="welcome">You are now logged in.\nWelcome to Sticky on Page.</string>
+
+</resources>
