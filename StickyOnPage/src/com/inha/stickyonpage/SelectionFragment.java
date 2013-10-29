@@ -16,24 +16,29 @@
 
 package com.inha.stickyonpage;
 
-import java.util.List;
+import twitter4j.IDs;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.User;
+import twitter4j.conf.ConfigurationBuilder;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphPlace;
 import com.facebook.model.GraphUser;
-import com.facebook.widget.ProfilePictureView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class SelectionFragment extends Fragment {
 	
@@ -66,7 +71,7 @@ public class SelectionFragment extends Fragment {
     	        makeMeRequest(session);
     	    }
     	} else if (MainActivity.getLoginStatus() == MainActivity.TWITTER) {
-    		// ...
+    		
     	}
     	
         return view;
@@ -136,4 +141,7 @@ public class SelectionFragment extends Fragment {
             makeMeRequest(session);
         }
     }
+
 }
+
+

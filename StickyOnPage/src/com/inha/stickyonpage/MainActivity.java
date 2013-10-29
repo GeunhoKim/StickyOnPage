@@ -16,22 +16,6 @@
 
 package com.inha.stickyonpage;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-
 import twitter4j.IDs;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -40,6 +24,20 @@ import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
@@ -68,6 +66,9 @@ public class MainActivity extends FragmentActivity {
     private Twitter twitter;
     private SharedPreferences twitterPref;
     private UiLifecycleHelper uiHelper;
+    
+    
+    TextView friendName;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -97,6 +98,8 @@ public class MainActivity extends FragmentActivity {
 				}.start();
 			}
 		});
+        
+        friendName = (TextView)findViewById(R.id.user_name); 
         
         FragmentManager fm = getSupportFragmentManager();
         fragments[SPLASH] = fm.findFragmentById(R.id.splashFragment);
@@ -137,6 +140,7 @@ public class MainActivity extends FragmentActivity {
 			verifier = data.getExtras().getString("verifier");
 			//saveOauth();
 			new SaveOauthAsync().execute(null, null, null);
+			new GetTwitterFollowerAsyncTask().execute((Integer)null);
 		}
     }
 
@@ -155,14 +159,12 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
-        /*
+        
         twitterPref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MODE_PRIVATE);
         String prefString = twitterPref.getString(TwitterConst.PREF_KEY_TWITTER_LOGIN, null);
 		if (prefString != null && prefString.equals("true")) {
         	showFragment(SELECTION, false);
-		}
-		*/
-        //else {
+		} else {
 	        Session session = Session.getActiveSession();
 	        if (session != null && session.isOpened()) {
 	        	loginStatus = FACEBOOK;
@@ -172,7 +174,7 @@ public class MainActivity extends FragmentActivity {
 	            // otherwise present the splash screen and ask the user to login, unless the user explicitly skipped.
 	            showFragment(SPLASH, false);
 	        }
-        //}
+        }
     }
 
     @Override
@@ -301,5 +303,58 @@ public class MainActivity extends FragmentActivity {
     
     public static int getLoginStatus() {
     	return loginStatus;
+    }
+    
+    
+    
+    public class GetTwitterFollowerAsyncTask extends AsyncTask<Integer, Integer, Integer>{
+    	String temp;
+    	public SharedPreferences pref;
+    	
+		@Override
+		protected Integer doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+    		pref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MainActivity.MODE_PRIVATE);
+		
+			ConfigurationBuilder builder = new ConfigurationBuilder();
+			builder.setOAuthConsumerKey(TwitterConst.TWITTER_CONSUMER_KEY);
+			builder.setOAuthConsumerSecret(TwitterConst.TWITTER_CONSUMER_SECRET);
+			builder.setOAuthAccessToken(pref.getString(TwitterConst.PREF_KEY_OAUTH_TOKEN, null));
+			builder.setOAuthAccessTokenSecret(pref.getString(TwitterConst.PREF_KEY_OAUTH_SECRET, null));
+              
+			TwitterFactory tf = new TwitterFactory(builder.build());
+			Twitter twitter = tf.getInstance();
+			
+			long err = -1; 
+			IDs ids = null;
+			
+			try {
+				ids = twitter.getFollowersIDs(err);
+			} catch (TwitterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			long[] list = ids.getIDs();
+
+			for(long d : ids.getIDs())
+			{	
+				User user = null;
+				try {
+					user = twitter.showUser(d);
+				} catch (TwitterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				temp += user.getName() + " ";
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			friendName.setText(temp);
+		}
     }
 }
