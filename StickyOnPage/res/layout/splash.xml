@@ -52,12 +52,13 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp" />
-    
-    <Button
-        android:id="@+id/login_button_twitter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-		android:gravity="center_horizontal"
-        android:text="TwitterLogin" />
 
+    <com.inha.stickyonpage.TwitterLoginButton
+        android:id="@+id/login_button_twitter"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:text="@string/twitterLogin" />
+        
 </LinearLayout>
