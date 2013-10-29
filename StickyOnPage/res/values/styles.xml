@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <color name="twitter_blue">#4099FF</color>
+    <color name="twitter_blue">#00aced</color>
     
     <dimen name="twitter_loginview_padding_left">12dip</dimen>
     <dimen name="twitter_loginview_padding_right">16dp</dimen>

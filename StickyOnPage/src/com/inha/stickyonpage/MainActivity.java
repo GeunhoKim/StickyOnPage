@@ -18,6 +18,7 @@ package com.inha.stickyonpage;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -61,7 +62,7 @@ public class MainActivity extends FragmentActivity {
     private Twitter twitter;
     private SharedPreferences twitterPref;
     private UiLifecycleHelper uiHelper;
-    
+
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -131,7 +132,8 @@ public class MainActivity extends FragmentActivity {
         
         if(requestCode == TwitterConst.TWITTER_OAUTH_CODE && resultCode == RESULT_OK){
 			verifier = data.getExtras().getString("verifier");
-			saveOauth();
+			//saveOauth();
+			new SaveOauthAsync().execute(null, null, null);
 		}
     }
 
@@ -154,7 +156,7 @@ public class MainActivity extends FragmentActivity {
         
         twitterPref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MODE_PRIVATE);
         String prefString = twitterPref.getString(TwitterConst.PREF_KEY_TWITTER_LOGIN, null);
-        Log.i("sop", "*" + prefString);
+        //Log.i("sop", "*" + prefString);
 		if (prefString != null && prefString.equals("true")) {
         	showFragment(SELECTION, false);
 		}
@@ -200,6 +202,7 @@ public class MainActivity extends FragmentActivity {
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
     	Log.i("sop", "onSessionStateChange");
+    	
     	if (isResumed) {
             FragmentManager manager = getSupportFragmentManager();
             int backStackSize = manager.getBackStackEntryCount();
@@ -254,24 +257,33 @@ public class MainActivity extends FragmentActivity {
         }
     }
     
-	private void saveOauth(){
-		new Thread(){
-			@Override
-			public void run() {
-				AccessToken at = null;
-				try {
-					at = twitter.getOAuthAccessToken(verifier);
-				} catch (TwitterException e) {
-					e.printStackTrace();
-				}
-				
-				twitterPref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MODE_PRIVATE);
-				SharedPreferences.Editor editor = twitterPref.edit();
-				editor.putString(TwitterConst.PREF_KEY_OAUTH_TOKEN, at.getToken());
-				editor.putString(TwitterConst.PREF_KEY_OAUTH_SECRET, at.getTokenSecret());
-				editor.putString(TwitterConst.PREF_KEY_TWITTER_LOGIN, "true");
-				editor.commit();
+    private class SaveOauthAsync extends AsyncTask<Object, Object, Object> {
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			AccessToken at = null;
+			try {
+				at = twitter.getOAuthAccessToken(verifier);
+			} catch (TwitterException e) {
+				e.printStackTrace();
 			}
-		}.start();
-	}
+			
+			twitterPref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MODE_PRIVATE);
+			SharedPreferences.Editor editor = twitterPref.edit();
+			editor.putString(TwitterConst.PREF_KEY_OAUTH_TOKEN, at.getToken());
+			editor.putString(TwitterConst.PREF_KEY_OAUTH_SECRET, at.getTokenSecret());
+			editor.putString(TwitterConst.PREF_KEY_TWITTER_LOGIN, "true");
+			editor.commit();
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Object result) {
+			twitterPref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MODE_PRIVATE);
+		    String prefString = twitterPref.getString(TwitterConst.PREF_KEY_TWITTER_LOGIN, null);
+		    //Log.i("sop", "*" + prefString);
+			if (prefString != null && prefString.equals("true")) {
+		       	showFragment(SELECTION, false);
+			}
+		}
+    }
 }

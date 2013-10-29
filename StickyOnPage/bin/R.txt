@@ -62,7 +62,7 @@ int drawable com_facebook_list_divider 0x7f02000c
 int drawable com_facebook_list_section_header_background 0x7f02000d
 int drawable com_facebook_loginbutton_silver 0x7f02000e
 int drawable com_facebook_logo 0x7f02000f
-int drawable com_facebook_picker_default_separator_color 0x7f020022
+int drawable com_facebook_picker_default_separator_color 0x7f020026
 int drawable com_facebook_picker_item_background 0x7f020010
 int drawable com_facebook_picker_list_focused 0x7f020011
 int drawable com_facebook_picker_list_longpressed 0x7f020012
@@ -80,7 +80,11 @@ int drawable com_facebook_top_background 0x7f02001d
 int drawable com_facebook_top_button 0x7f02001e
 int drawable com_facebook_usersettingsfragment_background_gradient 0x7f02001f
 int drawable ic_launcher 0x7f020020
-int drawable twitter_button_blue 0x7f020021
+int drawable selection_bg 0x7f020021
+int drawable twitter_button_blue 0x7f020022
+int drawable twitter_button_blue_normal 0x7f020023
+int drawable twitter_button_blue_pressed 0x7f020024
+int drawable twitter_inverse_icon 0x7f020025
 int id action_settings 0x7f040020
 int id com_facebook_login_activity_progress_bar 0x7f040008
 int id com_facebook_picker_activity_circle 0x7f040007
@@ -162,8 +166,9 @@ int string com_facebook_usersettingsfragment_log_in_button 0x7f070008
 int string com_facebook_usersettingsfragment_logged_in 0x7f070009
 int string com_facebook_usersettingsfragment_not_logged_in 0x7f07000a
 int string get_started 0x7f07001b
-int string settings 0x7f07001c
-int string welcome 0x7f07001d
+int string settings 0x7f07001d
+int string twitterLogin 0x7f07001c
+int string welcome 0x7f07001e
 int style AppBaseTheme 0x7f080002
 int style AppTheme 0x7f080003
 int style com_facebook_loginview_default_style 0x7f080000
