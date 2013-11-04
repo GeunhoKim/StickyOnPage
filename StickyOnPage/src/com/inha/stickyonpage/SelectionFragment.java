@@ -65,12 +65,12 @@ public class SelectionFragment extends Fragment {
     	View view = inflater.inflate(R.layout.selection, container, false);
     	userNameView = (TextView) view.findViewById(R.id.user_name);
     	
-    	if (MainActivity.getLoginStatus() == MainActivity.FACEBOOK) {
+    	if (MainActivity.getLoginStatus() == Const.FACEBOOK) {
     		Session session = Session.getActiveSession();
     	    if (session != null && session.isOpened()) {
     	        makeMeRequest(session);
     	    }
-    	} else if (MainActivity.getLoginStatus() == MainActivity.TWITTER) {
+    	} else if (MainActivity.getLoginStatus() == Const.TWITTER) {
     		
     	}
     	

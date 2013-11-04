@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class SopWebview extends Activity {
+public class LoginWebView extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +21,10 @@ public class SopWebview extends Activity {
 	            @Override
 	            public boolean shouldOverrideUrlLoading(WebView view, final String url)
 	            {
-	            	if(url.contains(TwitterConst.TWITTER_CALLBACK_URL))
+	            	if(url.contains(Const.TWITTER_CALLBACK_URL))
 	                {
 		            	Uri uri = Uri.parse(url);
-		            	String verifier = uri.getQueryParameter(TwitterConst.URL_TWITTER_OAUTH_VERIFIER);
+		            	String verifier = uri.getQueryParameter(Const.URL_TWITTER_OAUTH_VERIFIER);
 		            	
 		            	Intent i = new Intent();
 		            	i.putExtra("verifier", verifier);

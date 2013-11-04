@@ -21,23 +21,24 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.User;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
@@ -46,19 +47,7 @@ import com.facebook.UiLifecycleHelper;
 
 public class MainActivity extends FragmentActivity {
 
-    private static final String USER_SKIPPED_LOGIN_KEY = "user_skipped_login";
-
-    private static final int SPLASH = 0;
-    private static final int SELECTION = 1;
-    private static final int SETTINGS = 2;
-    private static final int FRAGMENT_COUNT = SETTINGS +1;
-    
-    public static final int LOGGEDOUT = 10;
-    public static final int TWITTER = 11;
-    public static final int FACEBOOK = 12;
-    private static int loginStatus = LOGGEDOUT;
-    
-    private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
+//  private Fragment[] fragments = new Fragment[Const.FRAGMENT_COUNT];
     private boolean isResumed = false;
         
     private MenuItem settings;
@@ -67,10 +56,20 @@ public class MainActivity extends FragmentActivity {
     private SharedPreferences twitterPref;
     private UiLifecycleHelper uiHelper;
     
+    DrawerLayout mDrawerLayout;
+    FrameLayout mFrameLayout;
     
-    TextView friendName;
+    private boolean mFlag = false;
+    private Handler mHandler = new Handler() {
 
-    private Session.StatusCallback callback = new Session.StatusCallback() {
+	    public void handleMessage(Message msg) {
+	        if(msg.what == 0) {
+	            mFlag = false;
+	        }
+	    }
+	};
+    
+   private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
             onSessionStateChange(session, state, exception);
@@ -85,8 +84,23 @@ public class MainActivity extends FragmentActivity {
         uiHelper.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-        Button twitterBtn = (Button)findViewById(R.id.login_button_twitter);
+        
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerLayout.openDrawer(Gravity.END);
+        mDrawerLayout.closeDrawer(Gravity.END);
+        
+        TextView tv = (TextView)findViewById(R.id.loginStatus);
+        tv.setText(""+Const.LOGINSTATUS);
+        
+        mFrameLayout = (FrameLayout)findViewById(R.id.drawer_main);
+        
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        BrowsingWebView browsingFragment = new BrowsingWebView();
+        ft.add(R.id.drawer_main, browsingFragment);
+        ft.commit();
+        
+/*      Button twitterBtn = (Button)findViewById(R.id.login_button_twitter);
         twitterBtn.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) {
@@ -100,17 +114,19 @@ public class MainActivity extends FragmentActivity {
 		});
         
         friendName = (TextView)findViewById(R.id.user_name); 
-        
+*/        
+        /*
         FragmentManager fm = getSupportFragmentManager();
-        fragments[SPLASH] = fm.findFragmentById(R.id.splashFragment);
-        fragments[SELECTION] = fm.findFragmentById(R.id.selectionFragment);
-        fragments[SETTINGS] = fm.findFragmentById(R.id.userSettingsFragment);
+        fragments[Const.SPLASH] = fm.findFragmentById(R.id.splashFragment);
+        fragments[Const.SELECTION] = fm.findFragmentById(R.id.selectionFragment);
+        fragments[Const.SETTINGS] = fm.findFragmentById(R.id.userSettingsFragment);
 
         FragmentTransaction transaction = fm.beginTransaction();
         for(int i = 0; i < fragments.length; i++) {
             transaction.hide(fragments[i]);
         }
         transaction.commit();
+        */
     }
 
     @Override
@@ -136,12 +152,12 @@ public class MainActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
         
-        if(requestCode == TwitterConst.TWITTER_OAUTH_CODE && resultCode == RESULT_OK){
+        /*if(requestCode == Const.TWITTER_OAUTH_CODE && resultCode == RESULT_OK){
 			verifier = data.getExtras().getString("verifier");
 			//saveOauth();
-			new SaveOauthAsync().execute(null, null, null);
+//			new SaveOauthAsync().execute(null, null, null);
 			new GetTwitterFollowerAsyncTask().execute((Integer)null);
-		}
+		}*/
     }
 
     @Override
@@ -156,31 +172,33 @@ public class MainActivity extends FragmentActivity {
         uiHelper.onSaveInstanceState(outState);
     }
 
+    /*
     @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
         
-        twitterPref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MODE_PRIVATE);
-        String prefString = twitterPref.getString(TwitterConst.PREF_KEY_TWITTER_LOGIN, null);
+        twitterPref = getSharedPreferences(Const.PREFERENCE_NAME, MODE_PRIVATE);
+        String prefString = twitterPref.getString(Const.PREF_KEY_TWITTER_LOGIN, null);
 		if (prefString != null && prefString.equals("true")) {
-        	showFragment(SELECTION, false);
+        	showFragment(Const.SELECTION, false);
 		} else {
 	        Session session = Session.getActiveSession();
 	        if (session != null && session.isOpened()) {
-	        	loginStatus = FACEBOOK;
+	        	Const.loginStatus = Const.FACEBOOK;
 	            // if the session is already open, try to show the selection fragment
-	        	showFragment(SELECTION, false);
+	        	showFragment(Const.SELECTION, false);
 	        } else {
 	            // otherwise present the splash screen and ask the user to login, unless the user explicitly skipped.
-	            showFragment(SPLASH, false);
+	            showFragment(Const.SPLASH, false);
 	        }
         }
     }
+    */
 
-    @Override
+   /* @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // only add the menu when the selection fragment is showing
-        if (fragments[SELECTION].isVisible()) {
+        if (fragments[Const.SELECTION].isVisible()) {
             if (menu.size() == 0) {
                 settings = menu.add(R.string.settings);
             }
@@ -190,24 +208,24 @@ public class MainActivity extends FragmentActivity {
             settings = null;
         }
         return false;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.equals(settings)) {
             showSettingsFragment();
             return true;
         }
         return false;
-    }
+    }*/
 
-    public void showSettingsFragment() {
-        showFragment(SETTINGS, true);
-    }
+    /*public void showSettingsFragment() {
+        showFragment(Const.SETTINGS, true);
+    }*/
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
     	if (isResumed) {
-            FragmentManager manager = getSupportFragmentManager();
+            /*FragmentManager manager = getSupportFragmentManager();
             int backStackSize = manager.getBackStackEntryCount();
             for (int i = 0; i < backStackSize; i++) {
                 manager.popBackStack();
@@ -215,22 +233,22 @@ public class MainActivity extends FragmentActivity {
             // check for the OPENED state instead of session.isOpened() since for the
             // OPENED_TOKEN_UPDATED state, the selection fragment should already be showing.
             if (state.equals(SessionState.OPENED)) {
-                showFragment(SELECTION, false);
+                showFragment(Const.SELECTION, false);
             } else if (state.isClosed()) {
-                showFragment(SPLASH, false);
-            }
+                showFragment(Const.SPLASH, false);
+            }*/
         }
     }
 
-    private void showFragment(int fragmentIndex, boolean addToBackStack) {
+   /* private void showFragment(int fragmentIndex, boolean addToBackStack) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         
-        if (fragmentIndex == SELECTION) {
+        if (fragmentIndex == Const.SELECTION) {
         	TextView textView = (TextView)findViewById(R.id.selection_string);
-        	if (loginStatus == TWITTER) {
+        	if (Const.loginStatus == Const.TWITTER) {
         		textView.setText("You are now logged in using Twitter.\nWelcome to Sticky on Page.");
-        	} else if (loginStatus == FACEBOOK) {
+        	} else if (Const.loginStatus == Const.FACEBOOK) {
         		textView.setText("You are now logged in using Facebook.\nWelcome to Sticky on Page.");
         	}
         }
@@ -246,12 +264,12 @@ public class MainActivity extends FragmentActivity {
             transaction.addToBackStack(null);
         }
         transaction.commit();
-    }
+    }*/
     
-    public void loginToTwitter(){
+    /*public void loginToTwitter(){
         ConfigurationBuilder builder = new ConfigurationBuilder();
-        builder.setOAuthConsumerKey(TwitterConst.TWITTER_CONSUMER_KEY);
-        builder.setOAuthConsumerSecret(TwitterConst.TWITTER_CONSUMER_SECRET);
+        builder.setOAuthConsumerKey(Const.TWITTER_CONSUMER_KEY);
+        builder.setOAuthConsumerSecret(Const.TWITTER_CONSUMER_SECRET);
         
         RequestToken requestToken;
         TwitterFactory factory = new TwitterFactory(builder.build());
@@ -263,15 +281,15 @@ public class MainActivity extends FragmentActivity {
             Intent i = new Intent(this, SopWebview.class);
             i.putExtra("URL", requestToken.getAuthenticationURL());
             
-            this.startActivityForResult(i, TwitterConst.TWITTER_OAUTH_CODE);
+            this.startActivityForResult(i, Const.TWITTER_OAUTH_CODE);
             
-            loginStatus = TWITTER;
+            Const.loginStatus = Const.TWITTER;
         } catch (TwitterException e) {
             e.printStackTrace();
         }
-    }
+    }*/
     
-    private class SaveOauthAsync extends AsyncTask<Object, Object, Object> {
+    /*private class SaveOauthAsync extends AsyncTask<Object, Object, Object> {
 		@Override
 		protected Object doInBackground(Object... arg0) {
 			AccessToken at = null;
@@ -281,31 +299,29 @@ public class MainActivity extends FragmentActivity {
 				e.printStackTrace();
 			}
 			
-			twitterPref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MODE_PRIVATE);
+			twitterPref = getSharedPreferences(Const.PREFERENCE_NAME, MODE_PRIVATE);
 			SharedPreferences.Editor editor = twitterPref.edit();
-			editor.putString(TwitterConst.PREF_KEY_OAUTH_TOKEN, at.getToken());
-			editor.putString(TwitterConst.PREF_KEY_OAUTH_SECRET, at.getTokenSecret());
-			editor.putString(TwitterConst.PREF_KEY_TWITTER_LOGIN, "true");
+			editor.putString(Const.PREF_KEY_OAUTH_TOKEN, at.getToken());
+			editor.putString(Const.PREF_KEY_OAUTH_SECRET, at.getTokenSecret());
+			editor.putString(Const.PREF_KEY_TWITTER_LOGIN, "true");
 			editor.commit();
 			return null;
 		}
 		
 		@Override
 		protected void onPostExecute(Object result) {
-			twitterPref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MODE_PRIVATE);
-		    String prefString = twitterPref.getString(TwitterConst.PREF_KEY_TWITTER_LOGIN, null);
+			twitterPref = getSharedPreferences(Const.PREFERENCE_NAME, MODE_PRIVATE);
+		    String prefString = twitterPref.getString(Const.PREF_KEY_TWITTER_LOGIN, null);
 
 			if (prefString != null && prefString.equals("true")) {
-		       	showFragment(SELECTION, false);
+//		       	showFragment(Const.SELECTION, false);
 			}
 		}
-    }
+    }*/
     
     public static int getLoginStatus() {
-    	return loginStatus;
+    	return Const.LOGINSTATUS;
     }
-    
-    
     
     public class GetTwitterFollowerAsyncTask extends AsyncTask<Integer, Integer, Integer>{
     	String temp;
@@ -314,13 +330,13 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		protected Integer doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
-    		pref = getSharedPreferences(TwitterConst.PREFERENCE_NAME, MainActivity.MODE_PRIVATE);
+    		pref = getSharedPreferences(Const.PREFERENCE_TWITTER, MainActivity.MODE_PRIVATE);
 		
 			ConfigurationBuilder builder = new ConfigurationBuilder();
-			builder.setOAuthConsumerKey(TwitterConst.TWITTER_CONSUMER_KEY);
-			builder.setOAuthConsumerSecret(TwitterConst.TWITTER_CONSUMER_SECRET);
-			builder.setOAuthAccessToken(pref.getString(TwitterConst.PREF_KEY_OAUTH_TOKEN, null));
-			builder.setOAuthAccessTokenSecret(pref.getString(TwitterConst.PREF_KEY_OAUTH_SECRET, null));
+			builder.setOAuthConsumerKey(Const.TWITTER_CONSUMER_KEY);
+			builder.setOAuthConsumerSecret(Const.TWITTER_CONSUMER_SECRET);
+			builder.setOAuthAccessToken(pref.getString(Const.PREF_KEY_OAUTH_TOKEN, null));
+			builder.setOAuthAccessTokenSecret(pref.getString(Const.PREF_KEY_OAUTH_SECRET, null));
               
 			TwitterFactory tf = new TwitterFactory(builder.build());
 			Twitter twitter = tf.getInstance();
@@ -354,7 +370,22 @@ public class MainActivity extends FragmentActivity {
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			friendName.setText(temp);
+//			friendName.setText(temp);
 		}
     }
+    
+    @Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK && getSupportFragmentManager().getBackStackEntryCount() == 0) {
+	        if(!mFlag) {
+	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+	            mFlag = true;
+	            mHandler.sendEmptyMessageDelayed(0, 2000);
+	            return false;
+	        } else {
+	            finish();
+	        }
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 }
