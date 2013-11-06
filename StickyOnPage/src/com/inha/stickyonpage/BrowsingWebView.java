@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -18,7 +19,6 @@ public class BrowsingWebView extends Fragment {
 		// TODO Auto-generated method stub
 		
 		View view = inflater.inflate(R.layout.webview, container, false);
-		
 
 		wv = (WebView)view.findViewById(R.id.webView1);
 		wv.setHorizontalScrollBarEnabled(false);
@@ -32,6 +32,10 @@ public class BrowsingWebView extends Fragment {
 		      return true;
 		    }
 		});
+		
+		WebSettings ws = wv.getSettings();
+		ws.setJavaScriptEnabled(true);
+		
 		wv.loadUrl("http://m.naver.com");
 		
 		return view;
