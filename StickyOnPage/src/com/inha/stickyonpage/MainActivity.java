@@ -26,8 +26,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AppEventsLogger;
@@ -76,8 +77,9 @@ public class MainActivity extends FragmentActivity {
         mDrawerLayout.openDrawer(Gravity.END);
         mDrawerLayout.closeDrawer(Gravity.END);
         
-        TextView tv = (TextView)findViewById(R.id.loginStatus);
-        tv.setText(""+Const.LOGINSTATUS);
+        
+//        TextView tv = (TextView)findViewById(R.id.drawer_tv);
+//        tv.setText(""+Const.LOGINSTATUS);
         
         mFrameLayout = (FrameLayout)findViewById(R.id.drawer_main);
         

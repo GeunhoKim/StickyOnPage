@@ -7,5 +7,6 @@
     <string name="twitterLogin">Log in with Twitter</string>
     <string name="settings">Settings</string>
     <string name="welcome">You are now logged in.\nWelcome to Sticky on Page.</string>
-
+	    
+    
 </resources>

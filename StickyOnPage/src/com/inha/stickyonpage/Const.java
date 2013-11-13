@@ -33,4 +33,8 @@ public class Const {
     public static final int TWITTER = 11;
     public static final int FACEBOOK = 12;
     public static int LOGINSTATUS = LOGGEDOUT;
+    
+    // Memo in Drawer
+    public static final String MEMO_POSITION = "memo_position";
+    public static final String MEMO_CONTENTS = "memo_contents";
 }
