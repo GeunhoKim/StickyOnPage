@@ -76,18 +76,15 @@ public class MainActivity extends FragmentActivity {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mDrawerLayout.openDrawer(Gravity.END);
         mDrawerLayout.closeDrawer(Gravity.END);
-        
-        
-//        TextView tv = (TextView)findViewById(R.id.drawer_tv);
-//        tv.setText(""+Const.LOGINSTATUS);
-        
+
         mFrameLayout = (FrameLayout)findViewById(R.id.drawer_main);
         
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        BrowsingWebView browsingFragment = new BrowsingWebView();
-        ft.add(R.id.drawer_main, browsingFragment);
+        //BrowsingWebView browsingFragment = new BrowsingWebView();
+        RecentStickyView stickyFragment = new RecentStickyView();
+        //ft.add(R.id.drawer_main, browsingFragment);
+        ft.add(R.id.drawer_main, stickyFragment);
         ft.commit();
-        
     }
 
     @Override
@@ -194,9 +191,10 @@ public class MainActivity extends FragmentActivity {
 		protected void onPostExecute(Integer result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-//			friendName.setText(temp);
+            //friendName.setText(temp);
 		}
-    }*/
+    }
+    */
     
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

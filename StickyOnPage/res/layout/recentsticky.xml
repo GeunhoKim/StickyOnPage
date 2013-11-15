@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF" >
+   
+	<Button
+	    android:id="@+id/recentsticky_button"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/button_str"/>
+	
+	<ScrollView
+	    android:id="@+id/scroll_view"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:fillViewport="true" >
+	    
+	    <ListView 
+	        android:id="@+id/list_view"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:divider="#FFFFFF"
+	        android:dividerHeight="3dp"
+	        android:layout_gravity="center_horizontal|center_vertical" />
+    
+</ScrollView>
+</LinearLayout>
