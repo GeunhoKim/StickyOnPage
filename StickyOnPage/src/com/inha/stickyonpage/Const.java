@@ -20,15 +20,10 @@ public class Const {
     public static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
     public static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
  
-    
     // Main Activity
     public static final String USER_SKIPPED_LOGIN_KEY = "user_skipped_login";
-
-    /*public static final int SPLASH = 0;
-    public static final int SELECTION = 1;
-    public static final int SETTINGS = 2;
-    public static final int FRAGMENT_COUNT = SETTINGS +1;*/
     
+    // Login Status
     public static final int LOGGEDOUT = 10;
     public static final int TWITTER = 11;
     public static final int FACEBOOK = 12;

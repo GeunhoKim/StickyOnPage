@@ -38,7 +38,6 @@ import com.facebook.UiLifecycleHelper;
 
 public class MainActivity extends FragmentActivity {
 
-//  private Fragment[] fragments = new Fragment[Const.FRAGMENT_COUNT];
     private boolean isResumed = false;
 
     private UiLifecycleHelper uiHelper;
