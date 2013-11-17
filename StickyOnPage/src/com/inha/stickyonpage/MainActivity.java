@@ -33,7 +33,6 @@ import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.inha.stickyonpage.MemoLinearLayout.MemoListAsyncTask;
 
 public class MainActivity extends FragmentActivity {
 
@@ -109,6 +108,10 @@ public class MainActivity extends FragmentActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
+        
+        if(requestCode == Const.MEMO_REFRESH_CODE && resultCode == RESULT_OK){
+        	mMemoLinearLayout.getMemoList();
+        }
     }
 
     @Override

@@ -26,8 +26,14 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 		inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.stickies = stickies;
 		this.resource = resource;
+		
+		init();
 	}
-
+	
+	public void init(){
+		stickies.add(0, new Sticky("", "", "", null, 0));
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
@@ -42,9 +48,7 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 			tv.setTextSize(70);
 			tv.setGravity(Gravity.CENTER);
 			tv.setText("+");
-		}
-		else if(position % 4 == 1 || position % 4 == 2)
-		{
+		} else if(position % 4 == 1 || position % 4 == 2) {
 			convertView.setBackgroundColor(Color.parseColor("#F9FFB8"));
 			tv.setText(stickies.get(position).getMemo());
 			tv.setTextSize(15);

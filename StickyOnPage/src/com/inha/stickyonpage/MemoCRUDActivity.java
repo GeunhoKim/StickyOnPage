@@ -50,7 +50,7 @@ public class MemoCRUDActivity extends Activity {
 			
 		} else {
 			// Read memo
-			new MemoCRUDAsyncTask(false).execute(new Integer[]{1});
+			getMemoCRUDAsyncTask(1);
 		}
 		
 		saveBtn = (Button)findViewById(R.id.saveBtn);
@@ -59,7 +59,8 @@ public class MemoCRUDActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				new MemoCRUDAsyncTask(true).execute(new Integer[]{0});
+				getMemoCRUDAsyncTask(0);
+				
 			}
 		});
 		
@@ -72,6 +73,10 @@ public class MemoCRUDActivity extends Activity {
 				finish();
 			}
 		});
+	}
+	
+	public void getMemoCRUDAsyncTask(int num){
+		new MemoCRUDAsyncTask(true).execute(new Integer[]{num});
 	}
 	
 	private class MemoCRUDAsyncTask extends AsyncTask<Integer, Integer, Integer>{
@@ -151,7 +156,7 @@ public class MemoCRUDActivity extends Activity {
 			
 			switch(result){
 				case 0: // Create Memo
-					
+	            	setResult(RESULT_OK);
 					finish();
 					break;
 				case 1: // Read Memo

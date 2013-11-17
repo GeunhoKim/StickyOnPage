@@ -3,6 +3,7 @@ package com.inha.stickyonpage;
 import java.sql.Connection;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,7 @@ public class MemoLinearLayout extends LinearLayout {
 	TextView goodOrder, dateOrder;
 	LinearLayout ll;
 	GridView mGridView;
-	List<Sticky> stickies;
+	
 	
 	public MemoLinearLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -70,7 +71,7 @@ public class MemoLinearLayout extends LinearLayout {
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
 				i.putExtra(Const.MEMO_POSITION, position);
 				i.putExtra(Const.MEMO_CONTENTS, ((TextView)view).getText());
-				mContext.startActivity(i);
+				((Activity) mContext).startActivityForResult(i, Const.MEMO_REFRESH_CODE);
 			}
 	    });
 	   
@@ -104,14 +105,15 @@ public class MemoLinearLayout extends LinearLayout {
 	}
 	
 	public void getMemoList(){
-		new MemoListAsyncTask(true).execute(new Integer[]{0});
+		new MemoListAsyncTask(false).execute(new Integer[]{0});
 	}
 	
-	public class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
+	private class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
 
 		ProgressDialog mDialog;
 		DBConnectionModule mDBConnectionModule;
 		boolean isDialog;
+		List<Sticky> stickies;
 		
 		MemoListAsyncTask(boolean isDialog){
 			this.isDialog = isDialog;
