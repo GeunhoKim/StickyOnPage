@@ -138,10 +138,7 @@ public class MainActivity extends FragmentActivity {
             }*/
         }
     }
-    
-    public static int getLoginStatus() {
-    	return Const.LOGINSTATUS;
-    }
+
     
     /*public class GetTwitterFollowerAsyncTask extends AsyncTask<Integer, Integer, Integer>{
     	String temp;
@@ -197,6 +194,7 @@ public class MainActivity extends FragmentActivity {
     
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+   	
 	    if (keyCode == KeyEvent.KEYCODE_BACK && getSupportFragmentManager().getBackStackEntryCount() == 0) {
 	        if(!mFlag) {
 	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();

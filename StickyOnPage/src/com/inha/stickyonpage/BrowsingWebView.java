@@ -11,7 +11,7 @@ import android.webkit.WebViewClient;
 
 public class BrowsingWebView extends Fragment {
 
-	WebView mView;
+	WebView mWebView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -19,23 +19,27 @@ public class BrowsingWebView extends Fragment {
 		
 		View view = inflater.inflate(R.layout.webview, container, false);
 
-		mView = (WebView)view.findViewById(R.id.webView1);
-		mView.setHorizontalScrollBarEnabled(false);
-		mView.setVerticalScrollBarEnabled(false);
-		mView.setFocusable(true);
-		mView.setWebViewClient(new WebViewClient(){
+		mWebView = (WebView)view.findViewById(R.id.webView1);
+		mWebView.setHorizontalScrollBarEnabled(false);
+		mWebView.setVerticalScrollBarEnabled(false);
+		mWebView.setFocusable(true);
+		mWebView.setWebViewClient(new WebViewClient(){
 
 		    @Override
 		    public boolean shouldOverrideUrlLoading(WebView view, String url){
-		      mView.loadUrl(url);
+		    	mWebView.loadUrl(url);
+		    	Const.URL = url;
 		      return true;
 		    }
 		});
 		
-		WebSettings mSettings = mView.getSettings();
+		WebSettings mSettings = mWebView.getSettings();
 		mSettings.setJavaScriptEnabled(true);
 		
-		mView.loadUrl("http://m.naver.com");	
+		mWebView.loadUrl(Const.URL);
+		Const.URL = "http://m.daum.net";
+		
 		return view;
 	}
+	
 }

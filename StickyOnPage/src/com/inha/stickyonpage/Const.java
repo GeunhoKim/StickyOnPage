@@ -10,10 +10,11 @@ public class Const {
     public static final int TWITTER_OAUTH_CODE = 777;
     
     // Preference Constants
-    public static final String PREFERENCE_TWITTER = "twitter_oauth";
+    public static final String PREFERENCE = "oauth";
     public static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
     public static final String PREF_KEY_OAUTH_SECRET = "oauth_secret";
-    public static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLogedIn";
+    public static final String PREF_LOGINSTATUS = "login_status";
+    public static String PREF_LOGINID = "login_id";
     
     // Twitter Oauth 
     public static final String URL_TWITTER_AUTH = "auth_url";
@@ -23,16 +24,10 @@ public class Const {
     // Main Activity
     public static final String USER_SKIPPED_LOGIN_KEY = "user_skipped_login";
     
-    // Login Status
-    public static final int LOGGEDOUT = 10;
-    public static final int TWITTER = 11;
-    public static final int FACEBOOK = 12;
-    public static int LOGINSTATUS = LOGGEDOUT;
-    
-    public static String LOGINID;
-    public static String URL;
-    
     // Memo in Drawer
     public static final String MEMO_POSITION = "memo_position";
     public static final String MEMO_CONTENTS = "memo_contents";
+    
+    public static String URL = "http://m.daum.net";
+    
 }

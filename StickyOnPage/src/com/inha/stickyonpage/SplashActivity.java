@@ -10,15 +10,15 @@ import android.os.Message;
 
 public class SplashActivity extends Activity {
 	private Context context;
-	private String twitterLogin;
+	private String loginStatus;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 		
-		SharedPreferences twitterPref = getSharedPreferences(Const.PREFERENCE_TWITTER, MODE_PRIVATE);
-		twitterLogin = twitterPref.getString(Const.PREF_KEY_TWITTER_LOGIN, "false");
+		SharedPreferences twitterPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
+		loginStatus = twitterPref.getString(Const.PREF_LOGINSTATUS, "");
 		
 		context = this;
 		
@@ -26,7 +26,7 @@ public class SplashActivity extends Activity {
 			@Override
 			public void handleMessage(Message msg) {
 				//Check Login
-				if(!twitterLogin.equals("true") && Const.LOGINSTATUS == Const.LOGGEDOUT){
+				if(!loginStatus.equals("Facebook") && !loginStatus.equals("Twitter")){
 					startActivity(new Intent(context, LoginActivity.class));
 				}else{
 					startActivity(new Intent(context, MainActivity.class));

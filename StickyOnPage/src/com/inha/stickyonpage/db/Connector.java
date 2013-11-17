@@ -17,8 +17,7 @@ public class Connector {
 	TTransport tr = new TSocket("localhost", 9160);
 	
 	// returns a new connection to our keyspace
-	public Cassandra.Client connect() throws TTransportException,
-			TException, InvalidRequestException {
+	public Cassandra.Client connect() throws TTransportException, TException, InvalidRequestException {
 
 		TFramedTransport tf = new TFramedTransport(tr);
 		TProtocol proto = new TBinaryProtocol(tf);
@@ -26,10 +25,11 @@ public class Connector {
 		tr.open();
 		client.set_keyspace("sop_db_1");
 		return client;
+		
 	}
 	
-	public Cassandra.Client connect(String keyspace) throws TTransportException,
-			TException, InvalidRequestException {
+	public Cassandra.Client connect(String keyspace) throws TTransportException, TException, InvalidRequestException {
+		
 		TFramedTransport tf = new TFramedTransport(tr);
 		TProtocol proto = new TBinaryProtocol(tf);
 		Cassandra.Client client = new Cassandra.Client(proto);

@@ -56,12 +56,12 @@ public class MemoLinearLayout extends LinearLayout {
 	    mGridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+			public void onItemClick(AdapterView<?> arg0, View view, int position,
 					long id) {
 				// TODO Auto-generated method stub
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
 				i.putExtra(Const.MEMO_POSITION, position);
-				i.putExtra(Const.MEMO_CONTENTS, ((TextView)arg1).getText());
+				i.putExtra(Const.MEMO_CONTENTS, ((TextView)view).getText());
 				mContext.startActivity(i);
 			}
 	    });

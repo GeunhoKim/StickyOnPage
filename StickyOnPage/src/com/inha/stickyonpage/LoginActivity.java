@@ -38,7 +38,7 @@ public class LoginActivity extends Activity {
 	RequestToken requestToken;
 	TwitterFactory factory;
 	String verifier;
-	SharedPreferences twitterPref;
+	SharedPreferences mSharedPref;
 	SharedPreferences.Editor editor;
 	
 	@Override
@@ -94,11 +94,20 @@ public class LoginActivity extends Activity {
 				e.printStackTrace();
 			}
 			
-			twitterPref = getSharedPreferences(Const.PREFERENCE_TWITTER, MODE_PRIVATE);
-			editor = twitterPref.edit();
+			mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
+			editor = mSharedPref.edit();
 			editor.putString(Const.PREF_KEY_OAUTH_TOKEN, at.getToken());
 			editor.putString(Const.PREF_KEY_OAUTH_SECRET, at.getTokenSecret());
-			editor.putString(Const.PREF_KEY_TWITTER_LOGIN, "true");
+			editor.putString(Const.PREF_LOGINSTATUS, "Twitter");
+			try {
+				editor.putString(Const.PREF_LOGINID, Long.toString(twitter.getId()));
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TwitterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			editor.commit();
 			
 			return null;
@@ -106,8 +115,6 @@ public class LoginActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Object result) {
-			Const.LOGINSTATUS = Const.TWITTER;
-			
 			Intent i = new Intent(LoginActivity.this, MainActivity.class);
 			startActivity(i);
 			finish();
@@ -128,8 +135,12 @@ public class LoginActivity extends Activity {
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		if(isResumed){
 			if (state.equals(SessionState.OPENED)) {
-				Const.LOGINSTATUS = Const.FACEBOOK;
-				
+				mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
+				editor = mSharedPref.edit();
+				editor.putString(Const.PREF_LOGINSTATUS, "Facebook");
+				editor.putString(Const.PREF_LOGINID, "Idontknow");
+				editor.commit();
+			
 				Intent i = new Intent(this, MainActivity.class);
 				startActivity(i);
 				finish();

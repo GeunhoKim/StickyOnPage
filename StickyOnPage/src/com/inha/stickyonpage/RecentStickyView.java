@@ -2,28 +2,26 @@ package com.inha.stickyonpage;
 
 import java.util.ArrayList;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 public class RecentStickyView extends Fragment {
 	private ListView mListView;
 	private ArrayList<String> mList;
 	private ArrayAdapter<String> mAdapter;
 	private Button mButton;
+	private ScrollView mScrollView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,10 +50,22 @@ public class RecentStickyView extends Fragment {
 		}
 		
 		mAdapter = new ArrayAdapter<String>(getActivity(), R.layout.stickyview, mList);
+		
+		mScrollView = (ScrollView)view.findViewById(R.id.scroll_view);
+		
 		mListView = (ListView)view.findViewById(R.id.list_view);
 		mListView.setBackgroundColor(Color.WHITE);
 		mListView.setAdapter(mAdapter);
 		mListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+		mListView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				mScrollView.requestDisallowInterceptTouchEvent(true);
+				return false;
+			}
+		} );
 
 		return view;
 	}

@@ -16,12 +16,20 @@ import java.util.List;
  *  test module to test Cassandra I/O
  */
 public class DBConnectionModule {
-  private static DBConnectionModule instance = new DBConnectionModule();
+  private static DBConnectionModule instance;
 
   public static DBConnectionModule getInstance() {
+	//Singletone pattern
+	if(instance == null){
+		instance = new DBConnectionModule();
+	}
     return instance;
   }
+  
+  private DBConnectionModule(){
+  }
 
+  
   // Connection method. (port / hostname / keyspace) are depend on the environment.
   //public static Connection getConnection() throws Exception {
   public Connection getConnection() throws Exception {
@@ -76,7 +84,7 @@ public class DBConnectionModule {
   public void testWriteSticky() throws Exception {
     Connection conn = getConnection();
     writeSticky("http://wsnews.co.kr/society/index_view.php?zipEncode===am1udoX0tB152x3vwA2zImX0tB15KmLrxyJzsn90wDoftz0f2yMetpSfMvWLME",
-            "geunho.khim@gmail.com", "�⑷꺽��湲곗썝�⑸땲��", conn);
+            "geunho.khim@gmail.com", "dfad", conn);
 
   }
 
@@ -87,7 +95,7 @@ public class DBConnectionModule {
    * @return stickies of specific user
    * @throws SQLException
    *
-   *  url���뱀젙 �좎����ㅽ떚�ㅻ뱾��媛�졇�⑤떎.
+   *  url占쏙옙占쎈���占쎌쥙占쏙옙占쏙옙�쎈뼒占썬끇諭억옙占썲첎占쎌죬占썩뫀��
    */
   public List<Sticky> getStickies(String url, String user, Connection conn) throws SQLException {
     Statement stmt = null;
@@ -134,7 +142,7 @@ public class DBConnectionModule {
    * @return all stickies of url
    * @throws SQLException
    *
-   *  url��紐⑤뱺 �ㅽ떚�ㅻ� 媛�졇�⑤떎.
+   *  url占쏙옙筌뤴뫀諭�占썬끋�싷옙�삼옙 揶쏉옙議뉛옙�ㅻ뼄.
    */
   public List<Sticky> getAllStickies(String url, Connection conn) throws SQLException {
     Statement stmt = null;
@@ -188,10 +196,10 @@ public class DBConnectionModule {
    *        (column name: "sticky_count", value: counter)
    *      }
    *  1. insertion of counter CF is done by update query, not insert.
-   *  2. count���낅뜲�댄듃
+   *  2. count占쏙옙占쎈굝�뀐옙�꾨뱜
    */
   public void addURL(String url, int e_count, int s_count, Connection conn) throws SQLException {
-    url = url.replace("'", "%27"); // apostrophe 瑜�%27濡�紐⑤몢 移섑솚�쒕떎.
+    url = url.replace("'", "%27"); // apostrophe �쒙옙%27嚥∽옙筌뤴뫀紐�燁살꼹�싷옙�뺣뼄.
     Statement stmt = null;
 
     try {
@@ -242,7 +250,7 @@ public class DBConnectionModule {
    *      RowKey: user_id
    *        (column name: f_id:url:created, value: null)
    *
-   *    泥�primary key媛��좎� �꾩씠�붿씠誘�줈 ���좎���紐⑤뱺 �좏샇�꾨� 諛붾줈 媛�졇�����덈뒗 �μ젏���덈떎.
+   *    筌ｏ옙primary key揶쏉옙占쎌쥙占�占쎄쑴�좑옙遺우뵠沃섓옙以�占쏙옙占쎌쥙占쏙옙占쏙쭗�ㅻ군 占쎌쥚�뉛옙袁⑨옙 獄쏅뗀以�揶쏉옙議뉛옙占쏙옙占쏙옙�덈뮉 占싸쇱젎占쏙옙占쎈뜄��
    *
    */
   public void addPreference(String user_id, String f_id, String url, Connection conn) throws SQLException {
