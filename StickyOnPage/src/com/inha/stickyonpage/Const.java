@@ -29,6 +29,9 @@ public class Const {
     public static final int FACEBOOK = 12;
     public static int LOGINSTATUS = LOGGEDOUT;
     
+    public static String LOGINID;
+    public static String URL;
+    
     // Memo in Drawer
     public static final String MEMO_POSITION = "memo_position";
     public static final String MEMO_CONTENTS = "memo_contents";
