@@ -16,8 +16,8 @@ public class LoginWebView extends Activity {
 		setContentView(R.layout.webview);
 	
 		String url = (String)getIntent().getExtras().get("URL");
-		WebView wb = (WebView)findViewById(R.id.webView1);
-		wb.setWebViewClient( new WebViewClient(){
+		WebView mView = (WebView)findViewById(R.id.webView1);
+		mView.setWebViewClient( new WebViewClient(){
 	            @Override
 	            public boolean shouldOverrideUrlLoading(WebView view, final String url)
 	            {
@@ -37,6 +37,6 @@ public class LoginWebView extends Activity {
 	            	return false;
 	            }
 	        });
-		wb.loadUrl(url);
+		mView.loadUrl(url);
 	}
 }

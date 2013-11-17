@@ -41,7 +41,6 @@ public class LoginActivity extends Activity {
 	SharedPreferences twitterPref;
 	SharedPreferences.Editor editor;
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -79,7 +78,6 @@ public class LoginActivity extends Activity {
 			        i.putExtra("URL", requestToken.getAuthenticationURL());
 			        LoginActivity.this.startActivityForResult(i, Const.TWITTER_OAUTH_CODE);	// start webView
 				} catch (TwitterException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
     		};

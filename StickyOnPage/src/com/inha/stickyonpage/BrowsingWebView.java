@@ -11,33 +11,31 @@ import android.webkit.WebViewClient;
 
 public class BrowsingWebView extends Fragment {
 
-	WebView wv;
+	WebView mView;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		
 		View view = inflater.inflate(R.layout.webview, container, false);
 
-		wv = (WebView)view.findViewById(R.id.webView1);
-		wv.setHorizontalScrollBarEnabled(false);
-		wv.setVerticalScrollBarEnabled(false);
-		wv.setFocusable(true);
-		wv.setWebViewClient(new WebViewClient(){
+		mView = (WebView)view.findViewById(R.id.webView1);
+		mView.setHorizontalScrollBarEnabled(false);
+		mView.setVerticalScrollBarEnabled(false);
+		mView.setFocusable(true);
+		mView.setWebViewClient(new WebViewClient(){
 
 		    @Override
 		    public boolean shouldOverrideUrlLoading(WebView view, String url){
-		      wv.loadUrl(url);
+		      mView.loadUrl(url);
 		      return true;
 		    }
 		});
 		
-		WebSettings ws = wv.getSettings();
-		ws.setJavaScriptEnabled(true);
+		WebSettings mSettings = mView.getSettings();
+		mSettings.setJavaScriptEnabled(true);
 		
-		wv.loadUrl("http://m.naver.com");
-		
+		mView.loadUrl("http://m.naver.com");	
 		return view;
 	}
 }
