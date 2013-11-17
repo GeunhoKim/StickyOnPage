@@ -29,6 +29,7 @@ public class BrowsingWebView extends Fragment {
 		    public boolean shouldOverrideUrlLoading(WebView view, String url){
 		    	mWebView.loadUrl(url);
 		    	Const.URL = url;
+		    	((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList();
 		      return true;
 		    }
 		});
@@ -42,4 +43,5 @@ public class BrowsingWebView extends Fragment {
 		return view;
 	}
 	
+
 }

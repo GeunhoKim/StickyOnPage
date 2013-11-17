@@ -26,8 +26,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -35,6 +33,7 @@ import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.inha.stickyonpage.MemoLinearLayout.MemoListAsyncTask;
 
 public class MainActivity extends FragmentActivity {
 
@@ -44,6 +43,7 @@ public class MainActivity extends FragmentActivity {
     
     DrawerLayout mDrawerLayout;
     FrameLayout mFrameLayout;
+    MemoLinearLayout mMemoLinearLayout;
     
     private boolean mFlag = false;
     private Handler mHandler = new Handler() {
@@ -78,10 +78,11 @@ public class MainActivity extends FragmentActivity {
 
         mFrameLayout = (FrameLayout)findViewById(R.id.drawer_main);
         
+        mMemoLinearLayout = (MemoLinearLayout)findViewById(R.id.drawer_left);
+        
+        
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        //BrowsingWebView browsingFragment = new BrowsingWebView();
         RecentStickyView stickyFragment = new RecentStickyView();
-        //ft.add(R.id.drawer_main, browsingFragment);
         ft.add(R.id.drawer_main, stickyFragment);
         ft.commit();
     }
@@ -207,4 +208,6 @@ public class MainActivity extends FragmentActivity {
 	    }
 	    return super.onKeyDown(keyCode, event);
 	}
+    
+    
 }

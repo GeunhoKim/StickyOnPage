@@ -1,18 +1,25 @@
 package com.inha.stickyonpage;
 
+import java.sql.Connection;
+import java.util.List;
+
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.inha.stickyonpage.db.DBConnectionModule;
+import com.inha.stickyonpage.db.Sticky;
+
 
 public class MemoLinearLayout extends LinearLayout {
 
@@ -20,6 +27,7 @@ public class MemoLinearLayout extends LinearLayout {
 	TextView goodOrder, dateOrder;
 	LinearLayout ll;
 	GridView mGridView;
+	List<Sticky> stickies;
 	
 	public MemoLinearLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -68,9 +76,9 @@ public class MemoLinearLayout extends LinearLayout {
 	   
 //	    mGridView.setAdapter(new MemoAdapter(mContext, R.layout.memo, null, null, to, flags));
 	    
-	    String []sample = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-	
-	    mGridView.setAdapter(new MemoAdapter(mContext, R.layout.memo, sample));
+//	    String []sample = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+//	
+//	    mGridView.setAdapter(new MemoAdapter(mContext, R.layout.memo, sample));
 	    
 	   
 	    goodOrder = (TextView)v.findViewById(R.id.goodOrder);
@@ -92,5 +100,76 @@ public class MemoLinearLayout extends LinearLayout {
 				
 			}
 		});
+		
+	}
+	
+	public void getMemoList(){
+		new MemoListAsyncTask(true).execute(new Integer[]{0});
+	}
+	
+	public class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
+
+		ProgressDialog mDialog;
+		DBConnectionModule mDBConnectionModule;
+		boolean isDialog;
+		
+		MemoListAsyncTask(boolean isDialog){
+			this.isDialog = isDialog;
+		}
+		
+		protected void onPreExecute() {
+			mDBConnectionModule = DBConnectionModule.getInstance();
+			if(isDialog)
+				showProgress();
+		};
+		
+		@Override
+		protected Integer doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+			switch(params[0]){
+				case 0: // order by date
+					Connection conn;
+					try {
+						conn = mDBConnectionModule.getConnection();
+						stickies = mDBConnectionModule.getAllStickies(Const.URL, conn);
+			
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				case 1: // order by good
+					break;
+			}
+			return params[0];
+		}
+	
+		@Override
+		protected void onPostExecute(Integer result) {
+			// TODO Auto-generated method stub
+			if(isDialog)
+				hideProgress();
+			
+			switch(result){
+				case 0: // order by date
+					mGridView.setAdapter(new MemoAdapter(mContext, R.layout.memo, stickies));
+					break;
+				case 1: // order by good
+					break;
+			}
+		}
+		
+		private void showProgress() {
+			// TODO Auto-generated method stub
+			mDialog = new ProgressDialog(mContext);
+			mDialog.setTitle("Sticky On Page");
+			mDialog.setMessage("잠시만 기다려 주세요");
+			mDialog.setCancelable(false);
+			mDialog.show();
+		}
+		
+		private void hideProgress(){
+			mDialog.cancel();
+		}
 	}
 }

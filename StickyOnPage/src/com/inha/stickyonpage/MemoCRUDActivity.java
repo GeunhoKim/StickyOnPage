@@ -120,7 +120,6 @@ public class MemoCRUDActivity extends Activity {
 					mEditText.setText(mIntent.getStringExtra(Const.MEMO_CONTENTS));
 					mEditText.setEnabled(false);
 					
-					saveBtn.setText("Good");
 					saveBtn.setOnClickListener(new OnClickListener() {
 						
 						@Override
@@ -150,9 +149,11 @@ public class MemoCRUDActivity extends Activity {
 			
 			switch(result){
 				case 0: // Create Memo
+					
 					finish();
 					break;
 				case 1: // Read Memo
+					saveBtn.setText("Good");
 					break;
 				case 2: // Update Memo
 					finish();
