@@ -104,7 +104,9 @@ public class MemoCRUDActivity extends Activity {
 				case 0: // Create Memo
 					try {
 						String text = mEditText.getText().toString();
-						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
+						// TODO This line gives error...
+						//String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
+						String id = "id";
 						Connection conn = mDBConnectionModule.getConnection();	
 						mDBConnectionModule.writeSticky(Const.URL, id, text, conn);
 						
