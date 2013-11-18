@@ -38,7 +38,7 @@ public class BrowsingWebView extends Fragment {
 		mSettings.setJavaScriptEnabled(true);
 		
 		mWebView.loadUrl(Const.URL);
-		Const.URL = "http://m.daum.net";
+		((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList();
 		
 		return view;
 	}

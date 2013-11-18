@@ -27,7 +27,8 @@ public class Const {
     // Memo in Drawer
     public static final String MEMO_POSITION = "memo_position";
     public static final String MEMO_CONTENTS = "memo_contents";
+    public static final int MEMO_REFRESH_CODE = 123;
     
-    public static String URL = "http://m.daum.net";
+    public static String URL = "http://m.daum.net/";
     
 }
