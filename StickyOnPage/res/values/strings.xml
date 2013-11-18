@@ -9,5 +9,8 @@
     <string name="settings">Settings</string>
     <string name="welcome">You are now logged in.\nWelcome to Sticky on Page.</string>
 	<string name="button_str">Start Browsing</string>
+	<string name="recent_sticky_str1">&#160;put Sticky</string>
+	<string name="recent_sticky_str2">on&#160;</string>
+	<string name="browser_hint">Enter URL</string>
     
 </resources>

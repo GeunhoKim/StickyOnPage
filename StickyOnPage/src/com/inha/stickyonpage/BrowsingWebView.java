@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class BrowsingWebView extends Fragment {
 
 	WebView mWebView;
+	Button mButton;
+	EditText mText;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +43,19 @@ public class BrowsingWebView extends Fragment {
 		
 		mWebView.loadUrl(Const.URL);
 		((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList();
+		
+		mText = (EditText)view.findViewById(R.id.browser_url);
+		mButton = (Button)view.findViewById(R.id.browser_button);
+		mButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String url = mText.getText().toString();
+				if (url != null && !url.equals(Const.URL)) {
+					mWebView.loadUrl(url);
+				}
+			}
+		});
 		
 		return view;
 	}

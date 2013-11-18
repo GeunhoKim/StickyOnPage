@@ -54,7 +54,7 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 			tv.setTextSize(15);
 			tv.setGravity(Gravity.TOP);
 		}else{
-			convertView.setBackgroundColor(Color.parseColor("#C3FFB8"));
+			convertView.setBackgroundColor(Color.parseColor("#f9f74a"));
 			tv.setText(stickies.get(position).getMemo());
 			tv.setTextSize(15);
 			tv.setGravity(Gravity.TOP);

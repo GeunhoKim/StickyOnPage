@@ -3,6 +3,5 @@
     android:id="@+id/memo"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:background="#C3FFB8"
+	android:background="#f9f74a"
     android:padding="10dp" />
-

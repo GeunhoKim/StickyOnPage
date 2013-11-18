@@ -12,14 +12,15 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_sop"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name="MainActivity"
             android:label="@string/app_name" />
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
-        <activity android:name="SplashActivity">
+        <activity android:name="SplashActivity"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />

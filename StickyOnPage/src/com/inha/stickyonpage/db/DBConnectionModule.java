@@ -89,14 +89,44 @@ public class DBConnectionModule {
   }
 
 
+  public List<Sticky> getAllStickies(Connection conn) throws SQLException {
+	    Statement stmt = null;
+	    ResultSet rs = null;
+
+	    try {
+	      stmt = conn.createStatement();
+	      String query = "select url, user_id, created, like, sticky from \"Sticky\"";
+	      rs = stmt.executeQuery(query);
+	    } catch (SQLException e) {
+	      e.printStackTrace();
+	    }
+
+	    List<Sticky> stickies = new ArrayList<Sticky>();
+	    
+	    int count = 20;
+	    while(rs.next() && (count-- >= 0)) {
+	      Sticky sticky = new Sticky();
+	      sticky.setURL(rs.getString(1));
+	      sticky.setUser(rs.getString(2));
+	      sticky.setTimestamp(rs.getDate(3));
+	      sticky.setLike(rs.getInt(4));
+	      sticky.setMemo(rs.getString(5));
+	      stickies.add(sticky);
+	    }
+
+	    rs.close();
+	    stmt.close();
+
+	    return stickies;
+  }
+  
   /**
    *
    * @param url, user, connection
    * @return stickies of specific user
    * @throws SQLException
    *
-   *  url占쏙옙占쎈���占쎌쥙占쏙옙占쏙옙�쎈뼒占썬끇諭억옙占썲첎占쎌죬占썩뫀��
-   */
+   *  url�좎룞�쇿뜝�덌옙占쏙옙�좎럩伊쇿뜝�숈삕�좎룞�숋옙�덈폃�좎뜫�뉓キ�듭삕�좎뜴泥롥뜝�뚯，�좎뜦維�옙占�   */
   public List<Sticky> getStickies(String url, String user, Connection conn) throws SQLException {
     Statement stmt = null;
     ResultSet rs = null;
@@ -142,7 +172,7 @@ public class DBConnectionModule {
    * @return all stickies of url
    * @throws SQLException
    *
-   *  url占쏙옙筌뤴뫀諭�占썬끋�싷옙�삼옙 揶쏉옙議뉛옙�ㅻ뼄.
+   *  url�좎룞�숂춯琉대�獄�옙�좎뜫�뗰옙�룹삕占쎌궪���띠룊�숃��쏆삕占썬끇堉�
    */
   public List<Sticky> getAllStickies(String url, Connection conn) throws SQLException {
     Statement stmt = null;
@@ -196,10 +226,10 @@ public class DBConnectionModule {
    *        (column name: "sticky_count", value: counter)
    *      }
    *  1. insertion of counter CF is done by update query, not insert.
-   *  2. count占쏙옙占쎈굝�뀐옙�꾨뱜
+   *  2. count�좎룞�쇿뜝�덇턁占쎈��숋옙袁⑤콦
    */
   public void addURL(String url, int e_count, int s_count, Connection conn) throws SQLException {
-    url = url.replace("'", "%27"); // apostrophe �쒙옙%27嚥∽옙筌뤴뫀紐�燁살꼹�싷옙�뺣뼄.
+    url = url.replace("'", "%27"); // apostrophe 占쎌뮋��27�β댙�숂춯琉대�筌륅옙�곸궡瑗뱄옙�룹삕占쎈베堉�
     Statement stmt = null;
 
     try {
@@ -250,7 +280,7 @@ public class DBConnectionModule {
    *      RowKey: user_id
    *        (column name: f_id:url:created, value: null)
    *
-   *    筌ｏ옙primary key揶쏉옙占쎌쥙占�占쎄쑴�좑옙遺우뵠沃섓옙以�占쏙옙占쎌쥙占쏙옙占쏙쭗�ㅻ군 占쎌쥚�뉛옙袁⑨옙 獄쏅뗀以�揶쏉옙議뉛옙占쏙옙占쏙옙�덈뮉 占싸쇱젎占쏙옙占쎈뜄��
+   *    嶺뚳퐦�셮rimary key�띠룊�쇿뜝�뚯쪠�좑옙�좎럡�댐옙醫묒삕�븐슦逾졿쾬�볦삕餓ο옙�좎룞�쇿뜝�뚯쪠�좎룞�쇿뜝�숈춻占썬끇援��좎럩伊싷옙�쏆삕熬곣뫅���꾩룆��빳占썸뤆�됱삕鈺곕돍�쇿뜝�숈삕�좎룞�숋옙�덈츎 �좎떥�깆젍�좎룞�쇿뜝�덈쐞占쏙옙
    *
    */
   public void addPreference(String user_id, String f_id, String url, Connection conn) throws SQLException {

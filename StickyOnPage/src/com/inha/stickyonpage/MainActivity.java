@@ -80,9 +80,9 @@ public class MainActivity extends FragmentActivity {
         
         mMemoLinearLayout = (MemoLinearLayout)findViewById(R.id.drawer_left);
         
-        
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         RecentStickyView stickyFragment = new RecentStickyView();
+        stickyFragment.getRecentStickyAsyncTask();
         ft.add(R.id.drawer_main, stickyFragment);
         ft.commit();
     }
