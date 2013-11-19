@@ -1,12 +1,22 @@
 package com.inha.stickyonpage;
 
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.inha.stickyonpage.db.DBConnectionModule;
+import com.inha.stickyonpage.db.Sticky;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.ArrayAdapter;
 
 public class SplashActivity extends Activity {
 	private Context context;

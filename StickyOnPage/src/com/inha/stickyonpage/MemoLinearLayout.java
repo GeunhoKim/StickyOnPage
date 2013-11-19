@@ -28,6 +28,7 @@ public class MemoLinearLayout extends LinearLayout {
 	TextView goodOrder, dateOrder;
 	LinearLayout ll;
 	GridView mGridView;
+	List<Sticky> stickies;
 	
 	
 	public MemoLinearLayout(Context context, AttributeSet attrs) {
@@ -108,13 +109,13 @@ public class MemoLinearLayout extends LinearLayout {
 		new MemoListAsyncTask(false).execute(new Integer[]{0});
 	}
 	
-	private class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
-
+	//private class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
+	public class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
 		ProgressDialog mDialog;
 		DBConnectionModule mDBConnectionModule;
 		boolean isDialog;
 		List<Sticky> stickies;
-		
+
 		MemoListAsyncTask(boolean isDialog){
 			this.isDialog = isDialog;
 		}

@@ -33,6 +33,7 @@ import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.inha.stickyonpage.MemoLinearLayout.MemoListAsyncTask;
 
 public class MainActivity extends FragmentActivity {
 
@@ -79,9 +80,9 @@ public class MainActivity extends FragmentActivity {
         
         mMemoLinearLayout = (MemoLinearLayout)findViewById(R.id.drawer_left);
         
-        
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         RecentStickyView stickyFragment = new RecentStickyView();
+        stickyFragment.getRecentStickyAsyncTask();
         ft.add(R.id.drawer_main, stickyFragment);
         ft.commit();
     }

@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -109,9 +110,7 @@ public class MemoCRUDActivity extends Activity {
 				case 0: // Create Memo
 					try {
 						String text = mEditText.getText().toString();
-						// TODO This line gives error...
-						//String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
-						String id = "id";
+						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
 						Connection conn = mDBConnectionModule.getConnection();	
 						mDBConnectionModule.writeSticky(Const.URL, id, text, conn);
 						
