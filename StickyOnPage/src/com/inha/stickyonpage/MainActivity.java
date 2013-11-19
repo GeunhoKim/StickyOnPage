@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.webkit.WebView;
@@ -204,8 +205,6 @@ public class MainActivity extends FragmentActivity {
     			WebView mWebView = (WebView)findViewById(R.id.webView1);
     			if(mWebView.canGoBack()) {
     				mWebView.goBack();
-    				Const.URL = mWebView.getUrl();
-    				mMemoLinearLayout.getMemoList();
     			} else {
     				if(!mFlag) {
         	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
