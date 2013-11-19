@@ -1,10 +1,5 @@
 package com.inha.stickyonpage;
 
-import com.facebook.AppEventsLogger;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -20,6 +15,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.facebook.AppEventsLogger;
+import com.facebook.Request;
+import com.facebook.Request.GraphUserCallback;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
+
 public class LoginActivity extends Activity {
 	
 	// Facebook variable
@@ -30,6 +34,10 @@ public class LoginActivity extends Activity {
             onSessionStateChange(session, state, exception);
         }
     };
+    
+  
+    
+    
     private boolean isResumed = false;
     
 	// Twitter variable
@@ -135,15 +143,23 @@ public class LoginActivity extends Activity {
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		if(isResumed){
 			if (state.equals(SessionState.OPENED)) {
-				mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
-				editor = mSharedPref.edit();
-				editor.putString(Const.PREF_LOGINSTATUS, "Facebook");
-				editor.putString(Const.PREF_LOGINID, "Idontknow");
-				editor.commit();
-			
-				Intent i = new Intent(this, MainActivity.class);
-				startActivity(i);
-				finish();
+				
+				Request.newMeRequest(session, new GraphUserCallback() {
+					
+					@Override
+					public void onCompleted(GraphUser user, Response response) {
+						// TODO Auto-generated method stub
+						mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
+						editor = mSharedPref.edit();
+						editor.putString(Const.PREF_LOGINSTATUS, "Facebook");
+						editor.putString(Const.PREF_LOGINID, user.getId());
+						editor.commit();
+					
+						Intent i = new Intent(LoginActivity.this, MainActivity.class);
+						startActivity(i);
+						finish();
+					}
+				}).executeAsync();
             }
 		}
     }
