@@ -1,9 +1,5 @@
 package com.inha.stickyonpage.db;
 
-import org.junit.Test;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +21,8 @@ public class DBConnectionModule {
 	}
     return instance;
   }
-  
-  private DBConnectionModule(){
-  }
 
-  
   // Connection method. (port / hostname / keyspace) are depend on the environment.
-  //public static Connection getConnection() throws Exception {
   public Connection getConnection() throws Exception {
     Connection conn = null;
     final String port = "9160";
@@ -70,8 +61,6 @@ public class DBConnectionModule {
       long ts = System.currentTimeMillis();
 
       String query = "insert into \"Sticky\"(url, user_id, sticky, created, like) values" +"('"+ url +"','"+ userID +"','"+ sticky +"',"+ ts +","+ 0 +");";
-
-      //String query = "update Sticky set sticky = '" + sticky + "', like = " + 0 + " where url = '" + url + "' and user_id = '" + userID + "' and created = " + ts +";";
       stmt.execute(query);
       addURL(url, 0, 1, conn);
     }  catch (Exception e) {
@@ -80,14 +69,6 @@ public class DBConnectionModule {
 
     stmt.close();
   }
-  @Test
-  public void testWriteSticky() throws Exception {
-    Connection conn = getConnection();
-    writeSticky("http://wsnews.co.kr/society/index_view.php?zipEncode===am1udoX0tB152x3vwA2zImX0tB15KmLrxyJzsn90wDoftz0f2yMetpSfMvWLME",
-            "geunho.khim@gmail.com", "dfad", conn);
-
-  }
-
 
   public List<Sticky> getAllStickies(Connection conn) throws SQLException {
 	    Statement stmt = null;
@@ -126,7 +107,8 @@ public class DBConnectionModule {
    * @return stickies of specific user
    * @throws SQLException
    *
-   *  url占쎌쥙猷욑옙�용쐻占쎈뜉�쇿뜝�숈삕占쎌쥙�⒳펺�용쐻占쎌늿�뺧옙醫롫짗占쎌닂�숋옙�덊룂占쎌쥙�ワ옙�볝궘占쎈벊�뺧옙醫롫쑕筌ｋ‥�앾옙��펽占쎌쥙��땟占쎌삕�좑옙   */
+   *  url의 특정 유저의 스티키들을 가져온다.
+   */
   public List<Sticky> getStickies(String url, String user, Connection conn) throws SQLException {
     Statement stmt = null;
     ResultSet rs = null;
@@ -156,15 +138,6 @@ public class DBConnectionModule {
 
     return stickies;
   }
-  @Test
-  public void testGetStickies() throws Exception {
-    Connection conn = getConnection();
-    List<Sticky> stickies = getStickies("http://wsnews.co.kr/society/index_view.php?zipEncode===am1udoX0tB152x3vwA2zImX0tB15KmLrxyJzsn90wDoftz0f2yMetpSfMvWLME", "geunho.khim@gmail.com", conn);
-    System.out.println("(url, user_id, created, like, sticky)");
-    for(Sticky sticky : stickies) {
-      System.out.println(sticky.getURL() +", "+ sticky.getUserID() +", "+ sticky.getTimestamp() +", "+ sticky.getLike() +", "+ sticky.getMemo());
-    }
-  }
 
   /**
    *
@@ -172,7 +145,11 @@ public class DBConnectionModule {
    * @return all stickies of url
    * @throws SQLException
    *
+<<<<<<< HEAD
+   *  url의 모든 스티키를 가져온다.
+=======
    *  url占쎌쥙猷욑옙�귥땡筌뚮�占썹뛾占쎌삕占쎌쥙�ワ옙�곗삕占쎈９�뺝뜝�뚭땔占쏙옙占쎈씈猷딉옙�껓옙占쎌룇�뺝뜝�щ걞�됵옙
+>>>>>>> upstream/master
    */
   public List<Sticky> getAllStickies(String url, Connection conn) throws SQLException {
     Statement stmt = null;
@@ -203,15 +180,6 @@ public class DBConnectionModule {
 
     return stickies;
   }
-  @Test
-  public void testGetAllStickies() throws Exception {
-    Connection conn = getConnection();
-    List<Sticky> stickies = getAllStickies("http://en.wikipedia.org/wiki/Tf%E2%80%93idf", conn);
-    System.out.println("(url, user_id, created, like, sticky)");
-    for(Sticky sticky : stickies) {
-      System.out.println(sticky.getURL() +", "+ sticky.getUserID() +", "+ sticky.getTimestamp() +", "+ sticky.getLike() +", "+ sticky.getMemo());
-    }
-  }
 
   /**
    *
@@ -226,11 +194,11 @@ public class DBConnectionModule {
    *        (column name: "sticky_count", value: counter)
    *      }
    *  1. insertion of counter CF is done by update query, not insert.
-   *  2. count占쎌쥙猷욑옙�용쐻占쎈뜃�곩뜝�덌옙占쎌닂�숃쥈�ㅼ쉐
+   *  2. count의 업데이트
    */
   public void addURL(String url, int e_count, int s_count, Connection conn) throws SQLException {
-	Statement stmt = null;
-    url = url.replace("'", "%27"); // apostrophe �좎럩裕뗰옙占�7占싸뀀뙔占쎌늹異�쭔��옙嶺뚮쪋�숋옙怨멸땀�쀫콈�숋옙猷뱀굲�좎럥踰졾젆占�    Statement stmt = null;
+    url = url.replace("'", "%27"); // apostrophe를 %27로 모두 치환한다.
+    Statement stmt = null;
 
     try {
       stmt = conn.createStatement();
@@ -244,31 +212,6 @@ public class DBConnectionModule {
 
     stmt.close();
   }
-  @Test
-  /**
-   *  This test program execute inserting 5,716,808 url address of Wikipedia(en) to the URL CF.
-   */
-  public void testAddURL() throws Exception {
-    long startTime = System.currentTimeMillis();
-
-    String currentDir = System.getProperty("user.dir");
-    FileReader fr = new FileReader(currentDir + "/resource/wiki-titles-sorted.txt");
-    BufferedReader br = new BufferedReader(fr, 500); // buffer size is 500
-
-    Connection conn = getConnection();
-    String title;
-    int count = 0;
-    for(int i = 0; i < 1000; i++) {
-      title = br.readLine();
-      addURL("http://en.wikipedia.org/wiki/" + title, 0, 0, conn);
-      count++;
-      if(count%1000==0)
-        System.out.print("1");
-    }
-
-    long endTime = System.currentTimeMillis();
-    System.out.println("\nInserting " + count + " urls, took " + (endTime - startTime) + " milliseconds");
-  }
 
   /**
    *
@@ -280,8 +223,7 @@ public class DBConnectionModule {
    *      RowKey: user_id
    *        (column name: f_id:url:created, value: null)
    *
-   *    癲ル슪��옙�췶imary key占쎈씈猷딉옙�용쐻占쎈슣履좑옙醫묒삕占쎌쥙�∽옙�먯삕�ル쵐�뺧옙釉먯뒭�얠×苡э옙蹂�굲繞벿우삕占쎌쥙猷욑옙�용쐻占쎈슣履좑옙醫롫짗占쎌눨�앾옙�덉떻�좎뜫�뉑뤃占쏙옙醫롫윪鴉딆떣�숋옙�놁굲�ш끽維낉옙占쏙옙袁⑸즴占쏙옙鍮녑뜝�몃쨬占쎈맩�뺡댖怨뺣룏占쎌눨�앾옙�덉굲占쎌쥙猷욑옙�뗭삕占쎈뜄痢�占쎌쥙�ο옙源놁젌占쎌쥙猷욑옙�용쐻占쎈뜄�욃뜝�숈삕
-   *
+   *  첫 primary key가 유저 아이디이므로 한 유저의 모든 선호도를 바로 가져올 수 있는 장점이 있다.
    */
   public void addPreference(String user_id, String f_id, String url, Connection conn) throws SQLException {
     Statement stmt = null;
@@ -298,11 +240,6 @@ public class DBConnectionModule {
     }
 
     stmt.close();
-  }
-  @Test
-  public void testAddPreference() throws Exception {
-    Connection conn = getConnection();
-    addPreference("geunho.khim@gmail.com", "rootkim0127@gmail.com", "http://en.wikipedia.org/wiki/Tf%E2%80%93idf", conn);
   }
 
   /**
@@ -337,14 +274,5 @@ public class DBConnectionModule {
     stmt.close();
 
     return urls;
-  }
-  @Test
-  public void testGetURLs() throws Exception {
-    int limit = 10;
-    Connection conn = getConnection();
-    List<String> urls = getURLs(limit, conn);
-
-    System.out.println(urls.toString());
-
   }
 }
