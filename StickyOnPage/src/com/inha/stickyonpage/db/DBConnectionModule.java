@@ -126,7 +126,7 @@ public class DBConnectionModule {
    * @return stickies of specific user
    * @throws SQLException
    *
-   *  url�좎룞�쇿뜝�덌옙占쏙옙�좎럩伊쇿뜝�숈삕�좎룞�숋옙�덈폃�좎뜫�뉓キ�듭삕�좎뜴泥롥뜝�뚯，�좎뜦維�옙占�   */
+   *  url占쎌쥙猷욑옙�용쐻占쎈뜉�쇿뜝�숈삕占쎌쥙�⒳펺�용쐻占쎌늿�뺧옙醫롫짗占쎌닂�숋옙�덊룂占쎌쥙�ワ옙�볝궘占쎈벊�뺧옙醫롫쑕筌ｋ‥�앾옙��펽占쎌쥙��땟占쎌삕�좑옙   */
   public List<Sticky> getStickies(String url, String user, Connection conn) throws SQLException {
     Statement stmt = null;
     ResultSet rs = null;
@@ -172,7 +172,7 @@ public class DBConnectionModule {
    * @return all stickies of url
    * @throws SQLException
    *
-   *  url�좎룞�숂춯琉대�獄�옙�좎뜫�뗰옙�룹삕占쎌궪���띠룊�숃��쏆삕占썬끇堉�
+   *  url占쎌쥙猷욑옙�귥땡筌뚮�占썹뛾占쎌삕占쎌쥙�ワ옙�곗삕占쎈９�뺝뜝�뚭땔占쏙옙占쎈씈猷딉옙�껓옙占쎌룇�뺝뜝�щ걞�됵옙
    */
   public List<Sticky> getAllStickies(String url, Connection conn) throws SQLException {
     Statement stmt = null;
@@ -226,11 +226,11 @@ public class DBConnectionModule {
    *        (column name: "sticky_count", value: counter)
    *      }
    *  1. insertion of counter CF is done by update query, not insert.
-   *  2. count�좎룞�쇿뜝�덇턁占쎈��숋옙袁⑤콦
+   *  2. count占쎌쥙猷욑옙�용쐻占쎈뜃�곩뜝�덌옙占쎌닂�숃쥈�ㅼ쉐
    */
   public void addURL(String url, int e_count, int s_count, Connection conn) throws SQLException {
-    url = url.replace("'", "%27"); // apostrophe 占쎌뮋��27�β댙�숂춯琉대�筌륅옙�곸궡瑗뱄옙�룹삕占쎈베堉�
-    Statement stmt = null;
+	Statement stmt = null;
+    url = url.replace("'", "%27"); // apostrophe �좎럩裕뗰옙占�7占싸뀀뙔占쎌늹異�쭔��옙嶺뚮쪋�숋옙怨멸땀�쀫콈�숋옙猷뱀굲�좎럥踰졾젆占�    Statement stmt = null;
 
     try {
       stmt = conn.createStatement();
@@ -280,7 +280,7 @@ public class DBConnectionModule {
    *      RowKey: user_id
    *        (column name: f_id:url:created, value: null)
    *
-   *    嶺뚳퐦�셮rimary key�띠룊�쇿뜝�뚯쪠�좑옙�좎럡�댐옙醫묒삕�븐슦逾졿쾬�볦삕餓ο옙�좎룞�쇿뜝�뚯쪠�좎룞�쇿뜝�숈춻占썬끇援��좎럩伊싷옙�쏆삕熬곣뫅���꾩룆��빳占썸뤆�됱삕鈺곕돍�쇿뜝�숈삕�좎룞�숋옙�덈츎 �좎떥�깆젍�좎룞�쇿뜝�덈쐞占쏙옙
+   *    癲ル슪��옙�췶imary key占쎈씈猷딉옙�용쐻占쎈슣履좑옙醫묒삕占쎌쥙�∽옙�먯삕�ル쵐�뺧옙釉먯뒭�얠×苡э옙蹂�굲繞벿우삕占쎌쥙猷욑옙�용쐻占쎈슣履좑옙醫롫짗占쎌눨�앾옙�덉떻�좎뜫�뉑뤃占쏙옙醫롫윪鴉딆떣�숋옙�놁굲�ш끽維낉옙占쏙옙袁⑸즴占쏙옙鍮녑뜝�몃쨬占쎈맩�뺡댖怨뺣룏占쎌눨�앾옙�덉굲占쎌쥙猷욑옙�뗭삕占쎈뜄痢�占쎌쥙�ο옙源놁젌占쎌쥙猷욑옙�용쐻占쎈뜄�욃뜝�숈삕
    *
    */
   public void addPreference(String user_id, String f_id, String url, Connection conn) throws SQLException {

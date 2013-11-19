@@ -53,12 +53,11 @@ public class BrowsingWebView extends Fragment {
 				String url = mText.getText().toString();
 				if (url != null && !url.equals(Const.URL)) {
 					mWebView.loadUrl(url);
+					Const.URL = url;
+			    	((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList();
 				}
 			}
 		});
-		
 		return view;
 	}
-	
-
 }
