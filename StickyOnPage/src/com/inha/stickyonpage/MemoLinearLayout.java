@@ -71,7 +71,6 @@ public class MemoLinearLayout extends LinearLayout {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position,
 					long id) {
-				// TODO Auto-generated method stub
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
 				i.putExtra(Const.MEMO_POSITION, position);
 				i.putExtra(Const.MEMO_CONTENTS, ((TextView)view).getText());

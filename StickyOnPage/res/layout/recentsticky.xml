@@ -3,20 +3,33 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="#FFFFFF" >
+    android:orientation="vertical" >
    
-	<Button
-	    android:id="@+id/recentsticky_button"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:text="@string/button_str"/>
+    <LinearLayout
+        android:id="@+id/recent_sticky_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/browser_go"/>
+		<Button
+		    android:id="@+id/recentsticky_button"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:background="@android:color/transparent"
+		    android:text="@string/button_str"/>
+	</LinearLayout>
 	
 	<ScrollView
 	    android:id="@+id/scroll_view"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:fillViewport="true" >
+	    android:paddingTop="15dp"
+	    android:fillViewport="true"
+	    android:background="@android:color/white" >
 	    
 	    <ListView 
 	        android:id="@+id/list_view"
@@ -25,6 +38,6 @@
 	        android:divider="#FFFFFF"
 	        android:dividerHeight="3dp"
 	        android:layout_gravity="center_horizontal|center_vertical" />
-    
-</ScrollView>
+   
+	</ScrollView>
 </LinearLayout>
