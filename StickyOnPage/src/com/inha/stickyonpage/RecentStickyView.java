@@ -22,6 +22,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ public class RecentStickyView extends Fragment {
 		View view = inflater.inflate(R.layout.recentsticky, container, false);
 				
 		mContext = getActivity();
-		
+
 		mButton = (Button)view.findViewById(R.id.recentsticky_button);
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -74,7 +75,7 @@ public class RecentStickyView extends Fragment {
 					int position, long id) {
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
 				TextView mTextView = (TextView)view.findViewById(R.id.memo_textview);
-				i.putExtra(Const.MEMO_POSITION, position);
+				i.putExtra(Const.MEMO_POSITION, 1);
 				i.putExtra(Const.MEMO_CONTENTS, mTextView.getText());
 				((Activity) mContext).startActivityForResult(i, Const.MEMO_REFRESH_CODE);
 				return false;

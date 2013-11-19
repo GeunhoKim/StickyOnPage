@@ -5,6 +5,7 @@ import java.util.List;
 import com.inha.stickyonpage.db.Sticky;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,15 +66,22 @@ public class RecentStickyAdapter extends ArrayAdapter<Sticky> {
         }
         
         String userID = sticky.getUserID();
+        if (userID.length() >= 20) {
+			userID = userID.substring(0, 20) + "...";
+		}
+        
 		String memo = sticky.getMemo();
-
+		//Log.i("naheon", "***" + memo);
 		if (memo.length() >= maxLength) {
 			memo = memo.substring(0, maxLength) + "...";
 		}
+		
 		String url = sticky.getURL();
+		//Log.i("naheon", "***" + url);
 		if (url.length() >= maxLength) {
 			url = url.substring(0, maxLength) + "...";
 		}
+		
         holder.text1.setText(userID);
         holder.text2.setText(memo);
         holder.text3.setText(url);
