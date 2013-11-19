@@ -77,7 +77,17 @@ public class MemoCRUDActivity extends Activity {
 	}
 	
 	public void getMemoCRUDAsyncTask(int num){
-		new MemoCRUDAsyncTask(true).execute(new Integer[]{num});
+		boolean isDialog = false;
+		
+		switch(num){
+			case 0 :
+				isDialog = true;	
+				break;
+			case 1 :
+				isDialog = false;
+				break;
+		}
+		new MemoCRUDAsyncTask(isDialog).execute(new Integer[]{num});
 	}
 	
 	private class MemoCRUDAsyncTask extends AsyncTask<Integer, Integer, Integer>{
