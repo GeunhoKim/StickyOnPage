@@ -24,8 +24,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -33,7 +35,6 @@ import com.facebook.AppEventsLogger;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.inha.stickyonpage.MemoLinearLayout.MemoListAsyncTask;
 
 public class MainActivity extends FragmentActivity {
 
@@ -83,7 +84,7 @@ public class MainActivity extends FragmentActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         RecentStickyView stickyFragment = new RecentStickyView();
         stickyFragment.getRecentStickyAsyncTask();
-        ft.add(R.id.drawer_main, stickyFragment);
+        ft.add(R.id.drawer_main, stickyFragment, "RecentStickyView");
         ft.commit();
     }
 
@@ -199,17 +200,33 @@ public class MainActivity extends FragmentActivity {
     
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-   	
-	    if (keyCode == KeyEvent.KEYCODE_BACK && getSupportFragmentManager().getBackStackEntryCount() == 0) {
-	        if(!mFlag) {
-	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
-	            mFlag = true;
-	            mHandler.sendEmptyMessageDelayed(0, 2000);
-	            return false;
-	        } else {
-	            finish();
-	        }
-	    }
+    	if(keyCode == KeyEvent.KEYCODE_BACK){
+    		if(getSupportFragmentManager().findFragmentByTag("BrowsingWebView") != null){
+    			WebView mWebView = (WebView)findViewById(R.id.webView1);
+    			if(mWebView.canGoBack()) {
+    				mWebView.goBack();
+    			} else {
+    				if(!mFlag) {
+        	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        	            mFlag = true;
+        	            mHandler.sendEmptyMessageDelayed(0, 2000);
+        	            return false;
+        	        } else {
+        	            finish();
+        	        }
+    			}
+    			return false;
+    		} else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+    	        if(!mFlag) {
+    	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+    	            mFlag = true;
+    	            mHandler.sendEmptyMessageDelayed(0, 2000);
+    	            return false;
+    	        } else {
+    	            finish();
+    	        }
+    	    }
+    	}
 	    return super.onKeyDown(keyCode, event);
 	}
     

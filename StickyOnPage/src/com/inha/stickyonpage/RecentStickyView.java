@@ -47,7 +47,7 @@ public class RecentStickyView extends Fragment {
 			public void onClick(View v) {
 				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 				BrowsingWebView browsingFragment = new BrowsingWebView();
-		        ft.replace(R.id.drawer_main, browsingFragment);
+		        ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
 		        ft.commit();
 			}
 		});

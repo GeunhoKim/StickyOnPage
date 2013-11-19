@@ -1,5 +1,6 @@
 package com.inha.stickyonpage;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,14 +28,12 @@ public class BrowsingWebView extends Fragment {
 		mWebView.setHorizontalScrollBarEnabled(false);
 		mWebView.setVerticalScrollBarEnabled(false);
 		mWebView.setFocusable(true);
-		mWebView.setWebViewClient(new WebViewClient(){
-
+		mWebView.setWebViewClient(new WebViewClient() {
 		    @Override
-		    public boolean shouldOverrideUrlLoading(WebView view, String url){
-		    	mWebView.loadUrl(url);
+		    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+		    	// TODO Auto-generated method stub
 		    	Const.URL = url;
 		    	((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList();
-		      return true;
 		    }
 		});
 		
@@ -53,12 +52,11 @@ public class BrowsingWebView extends Fragment {
 				String url = mText.getText().toString();
 				if (url != null && !url.equals(Const.URL)) {
 					mWebView.loadUrl(url);
+					Const.URL = url;
+			    	((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList();
 				}
 			}
 		});
-		
 		return view;
 	}
-	
-
 }

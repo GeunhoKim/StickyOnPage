@@ -145,7 +145,11 @@ public class DBConnectionModule {
    * @return all stickies of url
    * @throws SQLException
    *
+<<<<<<< HEAD
    *  url의 모든 스티키를 가져온다.
+=======
+   *  url占쎌쥙猷욑옙�귥땡筌뚮�占썹뛾占쎌삕占쎌쥙�ワ옙�곗삕占쎈９�뺝뜝�뚭땔占쏙옙占쎈씈猷딉옙�껓옙占쎌룇�뺝뜝�щ걞�됵옙
+>>>>>>> upstream/master
    */
   public List<Sticky> getAllStickies(String url, Connection conn) throws SQLException {
     Statement stmt = null;
