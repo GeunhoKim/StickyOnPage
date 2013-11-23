@@ -6,6 +6,7 @@ import java.util.List;
 import com.inha.stickyonpage.db.DBConnectionModule;
 import com.inha.stickyonpage.db.Sticky;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,7 +16,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -42,6 +47,7 @@ public class RecentStickyView extends Fragment {
 				
 		mContext = getActivity();
 
+		/*
 		mButton = (Button)view.findViewById(R.id.recentsticky_button);
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -52,7 +58,12 @@ public class RecentStickyView extends Fragment {
 		        ft.commit();
 			}
 		});
-
+		*/
+		
+		setHasOptionsMenu(true);
+		ActionBar mActionBar = ((Activity)mContext).getActionBar();
+		mActionBar.setDisplayShowTitleEnabled(false);
+		 
 		mScrollView = (ScrollView)view.findViewById(R.id.scroll_view);
 		mListView = (ListView)view.findViewById(R.id.list_view);
 		mListView.setBackgroundColor(Color.WHITE);
@@ -84,6 +95,25 @@ public class RecentStickyView extends Fragment {
 
 		return view;
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.recentsticky_menu, menu);
+	}
+	
+	 @Override
+     public boolean onOptionsItemSelected(MenuItem item) {
+    	switch(item.getItemId()) {
+    	case R.id.recent_search:
+    		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+			BrowsingWebView browsingFragment = new BrowsingWebView();
+	        ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
+	        ft.commit();
+    		return true;
+    	default:
+    		return super.onOptionsItemSelected(item);
+    	}
+    }
 	
 	public void getRecentStickyAsyncTask(){
 		new RecentStickyAsyncTask(false).execute(new Integer[]{0});

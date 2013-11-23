@@ -16,6 +16,7 @@
 
 package com.inha.stickyonpage;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,7 +25,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.webkit.WebView;
@@ -37,15 +37,14 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
 public class MainActivity extends FragmentActivity {
-
-    private boolean isResumed = false;
-
-    private UiLifecycleHelper uiHelper;
     
     DrawerLayout mDrawerLayout;
     FrameLayout mFrameLayout;
     MemoLinearLayout mMemoLinearLayout;
-    
+    private ActionBar mActionBar;
+
+    private boolean isResumed = false;
+    private UiLifecycleHelper uiHelper;
     private boolean mFlag = false;
     private Handler mHandler = new Handler() {
 
@@ -76,16 +75,24 @@ public class MainActivity extends FragmentActivity {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mDrawerLayout.openDrawer(Gravity.END);
         mDrawerLayout.closeDrawer(Gravity.END);
-
         mFrameLayout = (FrameLayout)findViewById(R.id.drawer_main);
-        
         mMemoLinearLayout = (MemoLinearLayout)findViewById(R.id.drawer_left);
-        
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         RecentStickyView stickyFragment = new RecentStickyView();
         stickyFragment.getRecentStickyAsyncTask();
         ft.add(R.id.drawer_main, stickyFragment, "RecentStickyView");
         ft.commit();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data);
+        
+        if(requestCode == Const.MEMO_REFRESH_CODE && resultCode == RESULT_OK){
+        	mMemoLinearLayout.getMemoList();
+        }
     }
 
     @Override
@@ -105,17 +112,7 @@ public class MainActivity extends FragmentActivity {
         uiHelper.onPause();
         isResumed = false;
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data);
-        
-        if(requestCode == Const.MEMO_REFRESH_CODE && resultCode == RESULT_OK){
-        	mMemoLinearLayout.getMemoList();
-        }
-    }
-
+    
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -130,73 +127,9 @@ public class MainActivity extends FragmentActivity {
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
     	if (isResumed) {
-            /*FragmentManager manager = getSupportFragmentManager();
-            int backStackSize = manager.getBackStackEntryCount();
-            for (int i = 0; i < backStackSize; i++) {
-                manager.popBackStack();
-            }
-            // check for the OPENED state instead of session.isOpened() since for the
-            // OPENED_TOKEN_UPDATED state, the selection fragment should already be showing.
-            if (state.equals(SessionState.OPENED)) {
-                showFragment(Const.SELECTION, false);
-            } else if (state.isClosed()) {
-                showFragment(Const.SPLASH, false);
-            }*/
+    		// ?
         }
     }
-
-    
-    /*public class GetTwitterFollowerAsyncTask extends AsyncTask<Integer, Integer, Integer>{
-    	String temp;
-    	public SharedPreferences pref;
-    	
-		@Override
-		protected Integer doInBackground(Integer... params) {
-			// TODO Auto-generated method stub
-    		pref = getSharedPreferences(Const.PREFERENCE_TWITTER, MainActivity.MODE_PRIVATE);
-		
-			ConfigurationBuilder builder = new ConfigurationBuilder();
-			builder.setOAuthConsumerKey(Const.TWITTER_CONSUMER_KEY);
-			builder.setOAuthConsumerSecret(Const.TWITTER_CONSUMER_SECRET);
-			builder.setOAuthAccessToken(pref.getString(Const.PREF_KEY_OAUTH_TOKEN, null));
-			builder.setOAuthAccessTokenSecret(pref.getString(Const.PREF_KEY_OAUTH_SECRET, null));
-              
-			TwitterFactory tf = new TwitterFactory(builder.build());
-			Twitter twitter = tf.getInstance();
-			
-			long err = -1; 
-			IDs ids = null;
-			
-			try {
-				ids = twitter.getFollowersIDs(err);
-			} catch (TwitterException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			long[] list = ids.getIDs();
-
-			for(long d : ids.getIDs())
-			{	
-				User user = null;
-				try {
-					user = twitter.showUser(d);
-				} catch (TwitterException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				temp += user.getName() + " ";
-			}
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-            //friendName.setText(temp);
-		}
-    }
-    */
     
     @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -207,7 +140,7 @@ public class MainActivity extends FragmentActivity {
     				mWebView.goBack();
     			} else {
     				if(!mFlag) {
-        	            Toast.makeText(this, "'µ⁄∑Œ'πˆ∆∞¿ª «—π¯ ¥ı ¥©∏£Ω√∏È ¡æ∑·µÀ¥œ¥Ÿ.", Toast.LENGTH_SHORT).show();
+        	            Toast.makeText(this, "'Îí§Î°ú'Î≤ÑÌäºÏùÑ ÌïúÎ≤à Îçî ÎàÑÎ•¥ÏãúÎ©¥ Ï¢ÖÎ£åÎê©ÎãàÎã§.", Toast.LENGTH_SHORT).show();
         	            mFlag = true;
         	            mHandler.sendEmptyMessageDelayed(0, 2000);
         	            return false;
@@ -218,7 +151,7 @@ public class MainActivity extends FragmentActivity {
     			return false;
     		} else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
     	        if(!mFlag) {
-    	            Toast.makeText(this, "'µ⁄∑Œ'πˆ∆∞¿ª «—π¯ ¥ı ¥©∏£Ω√∏È ¡æ∑·µÀ¥œ¥Ÿ.", Toast.LENGTH_SHORT).show();
+    	            Toast.makeText(this, "'Îí§Î°ú'Î≤ÑÌäºÏùÑ ÌïúÎ≤à Îçî ÎàÑÎ•¥ÏãúÎ©¥ Ï¢ÖÎ£åÎê©ÎãàÎã§.", Toast.LENGTH_SHORT).show();
     	            mFlag = true;
     	            mHandler.sendEmptyMessageDelayed(0, 2000);
     	            return false;
@@ -229,6 +162,4 @@ public class MainActivity extends FragmentActivity {
     	}
 	    return super.onKeyDown(keyCode, event);
 	}
-    
-    
 }
