@@ -35,9 +35,6 @@ public class LoginActivity extends Activity {
         }
     };
     
-  
-    
-    
     private boolean isResumed = false;
     
 	// Twitter variable

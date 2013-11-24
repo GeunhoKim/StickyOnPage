@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical">
+    
+    <ImageButton
+        android:id="@+id/browser_prev"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_action_previous_item"
+        android:paddingLeft="10dp"
+        android:contentDescription="@string/browsing_prev_str"/>
+
+</RelativeLayout>
