@@ -73,6 +73,7 @@ public class MainActivity extends FragmentActivity {
         
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        
         mDrawerLayout.openDrawer(Gravity.END);
         mDrawerLayout.closeDrawer(Gravity.END);
         mFrameLayout = (FrameLayout)findViewById(R.id.drawer_main);
@@ -140,7 +141,7 @@ public class MainActivity extends FragmentActivity {
     				mWebView.goBack();
     			} else {
     				if(!mFlag) {
-        	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        	            Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
         	            mFlag = true;
         	            mHandler.sendEmptyMessageDelayed(0, 2000);
         	            return false;
@@ -151,7 +152,7 @@ public class MainActivity extends FragmentActivity {
     			return false;
     		} else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
     	        if(!mFlag) {
-    	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+    	            Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
     	            mFlag = true;
     	            mHandler.sendEmptyMessageDelayed(0, 2000);
     	            return false;

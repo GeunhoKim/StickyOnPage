@@ -141,7 +141,7 @@ public class RecentStickyView extends Fragment {
 			Connection conn;
 			try {
 				conn = mDBConnectionModule.getConnection();
-				mStickyList = mDBConnectionModule.getAllStickies(conn);
+				mStickyList = mDBConnectionModule.getAllStickies("http://m.daum.net/", conn);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	

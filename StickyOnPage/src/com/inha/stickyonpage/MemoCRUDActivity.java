@@ -151,7 +151,14 @@ public class MemoCRUDActivity extends Activity {
 					
 					break;
 				case 4: // Good Memo
-					
+					try {
+						Connection conn = mDBConnectionModule.getConnection();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
+					//mDBConnectionModule.addPreference(id, f_id, Const.URL, conn);
 					break;
 			}
 			return params[0];

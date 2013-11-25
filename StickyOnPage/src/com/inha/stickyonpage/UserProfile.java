@@ -51,5 +51,12 @@ public class UserProfile {
 	public void setLoginStatus(String loginStatus) {
 		this.loginStatus = loginStatus;
 	}
+
+	@Override
+	public String toString() {
+		return "UserProfile [userId=" + userId + ", userName=" + userName
+				+ ", loginStatus=" + loginStatus + "]";
+	}
+	
 	
 }

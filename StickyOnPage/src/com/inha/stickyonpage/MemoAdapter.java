@@ -37,30 +37,59 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		TextView tv; 
+		TextView memo_contents, memo_info; 
 		
 		if(convertView == null)
 			convertView = inflater.inflate(resource, parent, false);
 		
-		tv = (TextView)convertView.findViewById(R.id.memo);
+		memo_contents = (TextView)convertView.findViewById(R.id.memo);
+		memo_info = (TextView)convertView.findViewById(R.id.memo_info);
 		
 		if(position == 0){
-			tv.setTextSize(70);
-			tv.setGravity(Gravity.CENTER);
-			tv.setText("+");
+			memo_info.setText(null);
+			memo_contents.setTextSize(70);
+			memo_contents.setGravity(Gravity.CENTER);
+			memo_contents.setText("+");
 		} else if(position % 4 == 1 || position % 4 == 2) {
 			convertView.setBackgroundColor(Color.parseColor("#F9FFB8"));
-			tv.setText(stickies.get(position).getMemo());
-			tv.setTextSize(15);
-			tv.setGravity(Gravity.TOP);
-		}else{
+			memo_info.setText(makeTitle(position));
+			memo_contents.setText(makeContent(position));
+			memo_contents.setTextSize(15);
+			memo_contents.setGravity(Gravity.TOP);
+		} else {
 			convertView.setBackgroundColor(Color.parseColor("#f9f74a"));
-			tv.setText(stickies.get(position).getMemo());
-			tv.setTextSize(15);
-			tv.setGravity(Gravity.TOP);
+			memo_info.setText(makeTitle(position));
+			memo_contents.setText(makeContent(position));
+			memo_contents.setTextSize(15);
+			memo_contents.setGravity(Gravity.TOP);
 		}
 		
 		return convertView;
+	}
+	
+	private String makeTitle(int position) {
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append(stickies.get(position).getTimestamp())
+		.append(" ");
+	
+		if(stickies.get(position).getUserID().length() > 12)
+			sb.append(stickies.get(position).getUserID().substring(0, 12)).append("..");
+		else
+			sb.append(stickies.get(position).getUserID());
+		
+		return sb.toString();
+	}
+	
+	private String makeContent(int position) {
+		StringBuffer sb = new StringBuffer();
+		
+		if(stickies.get(position).getMemo().length() > 100)
+			sb.append(stickies.get(position).getMemo().substring(0, 100)).append("..");
+		else
+			sb.append(stickies.get(position).getMemo());
+		
+		return sb.toString();
 	}
 
 }

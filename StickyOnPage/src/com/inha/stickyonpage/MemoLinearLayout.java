@@ -73,18 +73,12 @@ public class MemoLinearLayout extends LinearLayout {
 					long id) {
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
 				i.putExtra(Const.MEMO_POSITION, position);
-				i.putExtra(Const.MEMO_CONTENTS, ((TextView)view).getText());
+				i.putExtra(Const.MEMO_CONTENTS, ((TextView)(view.findViewById(R.id.memo))).getText());
 				((Activity) mContext).startActivityForResult(i, Const.MEMO_REFRESH_CODE);
 			}
 	    });
-	   
-//	    mGridView.setAdapter(new MemoAdapter(mContext, R.layout.memo, null, null, to, flags));
 	    
-//	    String []sample = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-//	
-//	    mGridView.setAdapter(new MemoAdapter(mContext, R.layout.memo, sample));
-	    
-	   
+	
 	    goodOrder = (TextView)v.findViewById(R.id.goodOrder);
 	    goodOrder.setOnClickListener(new OnClickListener() {
 			
@@ -111,8 +105,7 @@ public class MemoLinearLayout extends LinearLayout {
 		new MemoListAsyncTask(false).execute(new Integer[]{0});
 	}
 	
-	//private class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
-	public class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
+	private class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
 		ProgressDialog mDialog;
 		DBConnectionModule mDBConnectionModule;
 		boolean isDialog;
