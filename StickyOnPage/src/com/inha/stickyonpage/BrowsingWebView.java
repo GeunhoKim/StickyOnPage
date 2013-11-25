@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -65,7 +67,13 @@ public class BrowsingWebView extends Fragment {
 		WebSettings mSettings = mWebView.getSettings();
 		mSettings.setJavaScriptEnabled(true);
 		
-		mWebView.loadUrl(Const.URL);
+		String url = Const.URL;
+		Bundle bundle = this.getArguments();
+		if ((bundle != null) && bundle.containsKey("URL")) {
+			url = bundle.getString("URL");
+		}
+		//mWebView.loadUrl(Const.URL);
+		mWebView.loadUrl(url);
 		
 		// Action Bar
 		setHasOptionsMenu(true);
@@ -137,6 +145,13 @@ public class BrowsingWebView extends Fragment {
 		   			mDrawerLayout.closeDrawer(Gravity.RIGHT);
 		   		}
 		   		
+		   		return true;
+		   	case R.id.browsing_home:
+		   		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				RecentStickyView stickyFragment = new RecentStickyView();
+				stickyFragment.getRecentStickyAsyncTask();
+		        ft.replace(R.id.drawer_main, stickyFragment, "RecentStickyView");
+		        ft.commit();
 		   		return true;
 		   	default:
 		   		return super.onOptionsItemSelected(item);

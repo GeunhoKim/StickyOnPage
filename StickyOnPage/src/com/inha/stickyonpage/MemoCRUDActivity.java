@@ -45,10 +45,10 @@ public class MemoCRUDActivity extends Activity {
 		
 		mEditText = (EditText)findViewById(R.id.editText1);
 		
-		
 		if(position == 0) {
 			// Write memo
-			
+		} else if (position == 5) {
+			getMemoCRUDAsyncTask(position);
 		} else {
 			// Read memo
 			getMemoCRUDAsyncTask(1);
@@ -97,6 +97,7 @@ public class MemoCRUDActivity extends Activity {
 		 * Case 2 : Update Memo
 		 * Case 3 : Delete Memo
 		 * Case 4 : Good Memo
+		 * Case 5 : Read Memo from RecentStickyFragment
 		*/
 		
 		ProgressDialog mDialog;
@@ -148,7 +149,6 @@ public class MemoCRUDActivity extends Activity {
 				case 2: // Update Memo
 					break;
 				case 3: // Delete Memo
-					
 					break;
 				case 4: // Good Memo
 					try {
@@ -159,6 +159,20 @@ public class MemoCRUDActivity extends Activity {
 					}
 					String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
 					//mDBConnectionModule.addPreference(id, f_id, Const.URL, conn);
+					break;
+				case 5: // Read Memo from RecentStickyFragment
+					mEditText.setText(mIntent.getStringExtra(Const.MEMO_CONTENTS));
+					mEditText.setEnabled(false);
+					/*
+					saveBtn.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							new MemoCRUDAsyncTask(false).execute(new Integer[]{4});
+						}
+					});
+					*/
 					break;
 			}
 			return params[0];
@@ -176,6 +190,7 @@ public class MemoCRUDActivity extends Activity {
 					finish();
 					break;
 				case 1: // Read Memo
+					Log.i("naheon", "----- 11111 -----");
 					saveBtn.setText("Good");
 					break;
 				case 2: // Update Memo
@@ -185,7 +200,10 @@ public class MemoCRUDActivity extends Activity {
 					finish();
 					break;
 				case 4: // Good Memo
-					
+					break;
+				case 5: // Read Memo from RecentStickyFragment
+					Log.i("naheon", "----- 55555 -----");
+					saveBtn.setText("Go to webpage");
 					break;
 			}
 		}

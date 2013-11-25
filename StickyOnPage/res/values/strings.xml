@@ -16,5 +16,6 @@
 	<string name="recent_overflow_str">More</string>
 	<string name="browsing_prev_str">Sticky</string>
 	<string name="browsing_next_str">Recommendation</string>
+	<string name="browsing_home_str">Home</string>
 	
 </resources>

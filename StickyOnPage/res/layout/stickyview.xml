@@ -32,8 +32,9 @@
 	    
 	    <TextView
 	        android:id="@+id/memo_textview"
-	        android:layout_width="wrap_content"
+	        android:layout_width="330dp"
 	        android:layout_height="wrap_content"
+	        android:maxLines="1"
 	        android:paddingLeft="@dimen/recentsticky_padding_left" />
 	    
 	    <LinearLayout
@@ -49,8 +50,9 @@
 		        android:paddingLeft="@dimen/recentsticky_padding_left" />
 		    <TextView
 		        android:id="@+id/url_textview"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content" />
+		        android:layout_width="330dp"
+		        android:layout_height="wrap_content"
+		        android:maxLines="1" />
 		    
 	    </LinearLayout>
     </LinearLayout>
