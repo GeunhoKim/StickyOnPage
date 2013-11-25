@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/recent_actionview_url"
+         	android:layout_weight="7"
+         	android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:hint="@string/browser_hint"
+            android:inputType="textUri" />
+
+        <Button
+            android:id="@+id/recent_actionview_button"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/ic_action_search" />
+
+</LinearLayout>
