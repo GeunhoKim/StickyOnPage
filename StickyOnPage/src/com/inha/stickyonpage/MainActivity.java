@@ -154,8 +154,6 @@ public class MainActivity extends FragmentActivity {
     			if(mWebView.canGoBack()) {
     				mWebView.goBack();
     			} else {
-    					// init URL
-	    				 Const.URL = Const.HOME_URL;
         	        	 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         	             RecentStickyView stickyFragment = new RecentStickyView();
         	             stickyFragment.getRecentStickyAsyncTask();

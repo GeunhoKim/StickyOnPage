@@ -50,6 +50,8 @@ public class RecentStickyView extends Fragment {
 				
 		mContext = getActivity();
 		
+		Const.URL = Const.HOME_URL;
+		
 		setHasOptionsMenu(true);
 		ActionBar mActionBar = ((Activity)mContext).getActionBar();
 		mActionBar.setDisplayShowTitleEnabled(false);
@@ -118,18 +120,16 @@ public class RecentStickyView extends Fragment {
 					if (!url.startsWith("http://")) {
 						url = "http://" + url;
 					}
-					
 					Bundle bundle = new Bundle();
 					bundle.putString(Const.MEMO_URL_FROM_ACTIONBAR, url);
 					browsingFragment.setArguments(bundle);
-			        
 				}
 				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				
 				ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
 		        ft.commit();
 			}
 		});
-		
 	}
 	
 	/*
