@@ -160,6 +160,7 @@ public class BrowsingWebView extends Fragment {
 		   		mActionBar.setCustomView(null);
 				mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
 		   		
+				Const.URL = Const.HOME_URL;
 		   		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 				RecentStickyView stickyFragment = new RecentStickyView();
 				stickyFragment.getRecentStickyAsyncTask();
