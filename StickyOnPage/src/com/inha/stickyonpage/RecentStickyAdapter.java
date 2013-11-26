@@ -44,7 +44,7 @@ public class RecentStickyAdapter extends ArrayAdapter<Sticky> {
         final Sticky sticky = getItem(position);
 
         if(null == itemView) {
-            itemView = this.inflater.inflate(R.layout.stickyview, parent, false);
+            itemView = this.inflater.inflate(R.layout.recentsticky, parent, false);
 
             holder = new ViewHolder();
 
