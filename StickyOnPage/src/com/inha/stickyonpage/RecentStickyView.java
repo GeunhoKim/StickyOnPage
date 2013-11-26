@@ -27,38 +27,28 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class RecentStickyView extends Fragment {
-	private ListView mListView;
-	private List<Sticky> mStickyList;
+
 	private RecentStickyAdapter mAdapter;
 	private Button mButton;
-	private ScrollView mScrollView;
 	private Context mContext;
+	private ListView mListView;
+	private ScrollView mScrollView;
+	private List<Sticky> mStickyList;
+	private EditText mText;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.recentsticky, container, false);
+		View view = inflater.inflate(R.layout.recentsticky_list, container, false);
 				
 		mContext = getActivity();
-
-		/*
-		mButton = (Button)view.findViewById(R.id.recentsticky_button);
-		mButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-				BrowsingWebView browsingFragment = new BrowsingWebView();
-		        ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
-		        ft.commit();
-			}
-		});
-		*/
 		
 		setHasOptionsMenu(true);
 		ActionBar mActionBar = ((Activity)mContext).getActionBar();
@@ -70,26 +60,42 @@ public class RecentStickyView extends Fragment {
 		mListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
 
 		mListView.setOnTouchListener(new OnTouchListener() {
-			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				// TODO Auto-generated method stub
 				mScrollView.requestDisallowInterceptTouchEvent(true);
 				return false;
 			}
 		} );
 
-		mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				TextView memoText = (TextView)view.findViewById(R.id.memo_textview);
+				TextView urlText = (TextView)view.findViewById(R.id.url_textview);
+				
+				Intent i = new Intent(mContext, MemoCRUDActivity.class);
+				i.putExtra(Const.MEMO_POSITION, 5); //i.putExtra(Const.MEMO_POSITION, 1);
+				i.putExtra(Const.MEMO_CONTENTS, memoText.getText());
+				i.putExtra(Const.MEMO_URL_FROM_MEMO_READ, urlText.getText());
+				((Activity) mContext).startActivityForResult(i, Const.MEMO_REFRESH_CODE);
+			}
+		});
 
+		mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent i = new Intent(mContext, MemoCRUDActivity.class);
-				TextView mTextView = (TextView)view.findViewById(R.id.memo_textview);
-				i.putExtra(Const.MEMO_POSITION, 1);
-				i.putExtra(Const.MEMO_CONTENTS, mTextView.getText());
-				((Activity) mContext).startActivityForResult(i, Const.MEMO_REFRESH_CODE);
-				return false;
+				TextView urlText = (TextView)view.findViewById(R.id.url_textview);
+				Bundle bundle = new Bundle();
+				bundle.putString(Const.MEMO_URL_FROM_MEMO_LIST, urlText.getText().toString());
+				
+				BrowsingWebView browsingFragment = new BrowsingWebView();
+				browsingFragment.setArguments(bundle);
+				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
+		        ft.commit();
+		        
+				return true;
 			}
 		});
 
@@ -99,21 +105,43 @@ public class RecentStickyView extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.recentsticky_menu, menu);
+		
+		View mView = menu.findItem(R.id.recent_search).getActionView();
+		mText = (EditText)mView.findViewById(R.id.recent_actionview_url);
+		mButton = (Button)mView.findViewById(R.id.recent_actionview_button);
+		mButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String url = mText.getText().toString();
+				BrowsingWebView browsingFragment = new BrowsingWebView();
+				
+				if (!url.equals("")) {
+					if (!url.startsWith("http://")) {
+						url = "http://" + url;
+					}
+					
+					Bundle bundle = new Bundle();
+					bundle.putString(Const.MEMO_URL_FROM_ACTIONBAR, url);
+					browsingFragment.setArguments(bundle);
+			        
+				}
+				FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+				ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
+		        ft.commit();
+			}
+		});
+		
 	}
 	
+	/*
 	 @Override
      public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()) {
-    	case R.id.recent_search:
-    		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-			BrowsingWebView browsingFragment = new BrowsingWebView();
-	        ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
-	        ft.commit();
-    		return true;
     	default:
     		return super.onOptionsItemSelected(item);
     	}
     }
+    */
 	
 	public void getRecentStickyAsyncTask(){
 		new RecentStickyAsyncTask(false).execute(new Integer[]{0});
@@ -141,7 +169,8 @@ public class RecentStickyView extends Fragment {
 			Connection conn;
 			try {
 				conn = mDBConnectionModule.getConnection();
-				mStickyList = mDBConnectionModule.getAllStickies("http://m.daum.net/", conn);
+				//mStickyList = mDBConnectionModule.getAllStickies("http://m.daum.net/", conn);
+				mStickyList = mDBConnectionModule.getAllStickies(conn);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	
@@ -155,7 +184,7 @@ public class RecentStickyView extends Fragment {
 				hideProgress();
 			}
 
-			mAdapter = new RecentStickyAdapter(getActivity(), R.layout.stickyview, mStickyList);
+			mAdapter = new RecentStickyAdapter(getActivity(), R.layout.recentsticky, mStickyList);
 			mListView.setAdapter(mAdapter);
 		}
 		

@@ -5,9 +5,12 @@ import java.sql.SQLException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.inha.stickyonpage.db.DBConnectionModule;
 
@@ -26,6 +30,7 @@ import com.inha.stickyonpage.db.DBConnectionModule;
 public class MemoCRUDActivity extends Activity {
 
 	Button saveBtn, cancleBtn;
+	Context mContext;
 	EditText mEditText;
 	Intent mIntent;
 	
@@ -35,6 +40,7 @@ public class MemoCRUDActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 
+		mContext = this;
 		setContentView(R.layout.memo_write);
 		
 		// Set Dialog Size
@@ -45,10 +51,10 @@ public class MemoCRUDActivity extends Activity {
 		
 		mEditText = (EditText)findViewById(R.id.editText1);
 		
-		
 		if(position == 0) {
 			// Write memo
-			
+		} else if (position == 5) {
+			getMemoCRUDAsyncTask(position);
 		} else {
 			// Read memo
 			getMemoCRUDAsyncTask(1);
@@ -97,6 +103,7 @@ public class MemoCRUDActivity extends Activity {
 		 * Case 2 : Update Memo
 		 * Case 3 : Delete Memo
 		 * Case 4 : Good Memo
+		 * Case 5 : Read Memo from RecentStickyFragment
 		*/
 		
 		ProgressDialog mDialog;
@@ -148,7 +155,6 @@ public class MemoCRUDActivity extends Activity {
 				case 2: // Update Memo
 					break;
 				case 3: // Delete Memo
-					
 					break;
 				case 4: // Good Memo
 					try {
@@ -159,6 +165,19 @@ public class MemoCRUDActivity extends Activity {
 					}
 					String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
 					//mDBConnectionModule.addPreference(id, f_id, Const.URL, conn);
+					break;
+				case 5: // Read Memo from RecentStickyFragment
+					mEditText.setText(mIntent.getStringExtra(Const.MEMO_CONTENTS));
+					mEditText.setEnabled(false);
+
+					saveBtn.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(mContext, MainActivity.class);
+							intent.putExtra(Const.MEMO_URL_FROM_MEMO_READ, mIntent.getStringExtra(Const.MEMO_URL_FROM_MEMO_READ));
+							((Activity) mContext).startActivity(intent);
+						}
+					});
 					break;
 			}
 			return params[0];
@@ -185,7 +204,9 @@ public class MemoCRUDActivity extends Activity {
 					finish();
 					break;
 				case 4: // Good Memo
-					
+					break;
+				case 5: // Read Memo from RecentStickyFragment
+					saveBtn.setText("Go to webpage");
 					break;
 			}
 		}

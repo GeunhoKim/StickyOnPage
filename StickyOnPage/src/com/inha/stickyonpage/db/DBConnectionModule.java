@@ -183,6 +183,40 @@ public class DBConnectionModule {
   }
 
   /**
+   * [NAHEON]
+   * This is a temporal method for Recent sticky fragment.
+   */
+  public List<Sticky> getAllStickies(Connection conn) throws SQLException {
+	  Statement stmt = null;
+	  ResultSet rs = null;
+
+	  try {
+		  stmt = conn.createStatement();
+		  String query = "select url, user_id, created, like, sticky from \"Sticky\"";
+		  rs = stmt.executeQuery(query);
+	  } catch (SQLException e) {
+		  e.printStackTrace();
+	  }
+
+	  List<Sticky> stickies = new ArrayList<Sticky>();
+
+	  int count = 20;
+	  while(rs.next() && (count-- >= 0)) {
+		  Sticky sticky = new Sticky();
+		  sticky.setURL(rs.getString(1));
+		  sticky.setUser(rs.getString(2));
+		  sticky.setTimestamp(rs.getDate(3));
+		  sticky.setLike(rs.getInt(4));
+		  sticky.setMemo(rs.getString(5));
+		  stickies.add(sticky);
+	  }
+
+	  rs.close();
+	  stmt.close();
+	  return stickies;
+}
+  
+  /**
    *
    * @param url
    * @param conn

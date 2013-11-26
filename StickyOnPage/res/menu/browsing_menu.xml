@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/browsing_home"
+        android:icon="@drawable/ic_action_home"
+        android:showAsAction="ifRoom"
+        android:title="@string/browsing_home_str" />
+    
     <item android:id="@+id/browsing_next"
         android:icon="@drawable/ic_action_next_item"
         android:showAsAction="ifRoom"

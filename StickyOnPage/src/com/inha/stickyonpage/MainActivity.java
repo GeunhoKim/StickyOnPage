@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.webkit.WebView;
@@ -42,6 +43,7 @@ public class MainActivity extends FragmentActivity {
     FrameLayout mFrameLayout;
     MemoLinearLayout mMemoLinearLayout;
     private ActionBar mActionBar;
+    private Intent mIntent;
 
     private boolean isResumed = false;
     private UiLifecycleHelper uiHelper;
@@ -80,9 +82,20 @@ public class MainActivity extends FragmentActivity {
         mMemoLinearLayout = (MemoLinearLayout)findViewById(R.id.drawer_left);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        RecentStickyView stickyFragment = new RecentStickyView();
-        stickyFragment.getRecentStickyAsyncTask();
-        ft.add(R.id.drawer_main, stickyFragment, "RecentStickyView");
+		mIntent = getIntent();
+		if (mIntent.hasExtra(Const.MEMO_URL_FROM_MEMO_READ)) { // when MainActivity is called from MemoCRUDActivity
+			String url = mIntent.getStringExtra(Const.MEMO_URL_FROM_MEMO_READ);
+			Bundle bundle = new Bundle();
+			bundle.putString(Const.MEMO_URL_FROM_MEMO_READ, url);
+			
+			BrowsingWebView browsingFragment = new BrowsingWebView();
+			browsingFragment.setArguments(bundle);
+			ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
+		} else {
+			RecentStickyView stickyFragment = new RecentStickyView();
+			stickyFragment.getRecentStickyAsyncTask();
+			ft.add(R.id.drawer_main, stickyFragment, "RecentStickyView");
+		}
         ft.commit();
     }
 
@@ -141,7 +154,7 @@ public class MainActivity extends FragmentActivity {
     				mWebView.goBack();
     			} else {
     				if(!mFlag) {
-        	            Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        	            Toast.makeText(this, "'�ㅻ줈'踰꾪듉 �쒕쾲 ���꾨Ⅴ�쒕㈃ 醫낅즺�⑸땲��", Toast.LENGTH_SHORT).show();
         	            mFlag = true;
         	            mHandler.sendEmptyMessageDelayed(0, 2000);
         	            return false;
@@ -152,7 +165,7 @@ public class MainActivity extends FragmentActivity {
     			return false;
     		} else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
     	        if(!mFlag) {
-    	            Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+    	            Toast.makeText(this, "'�ㅻ줈'踰꾪듉 �쒕쾲 ���꾨Ⅴ�쒕㈃ 醫낅즺�⑸땲��", Toast.LENGTH_SHORT).show();
     	            mFlag = true;
     	            mHandler.sendEmptyMessageDelayed(0, 2000);
     	            return false;

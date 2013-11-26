@@ -28,14 +28,6 @@ public class RecentStickyAdapter extends ArrayAdapter<Sticky> {
     private final LayoutInflater inflater;
     private final int maxLength = 27;
 
-    /**
-     * General constructor
-     *
-     * @param context
-     * @param resource
-     * @param textViewResourceId
-     * @param objects
-     */
     public RecentStickyAdapter (final Context context,
             final int textViewResourceId,
             final List<Sticky> objects) {
@@ -52,7 +44,7 @@ public class RecentStickyAdapter extends ArrayAdapter<Sticky> {
         final Sticky sticky = getItem(position);
 
         if(null == itemView) {
-            itemView = this.inflater.inflate(R.layout.stickyview, parent, false);
+            itemView = this.inflater.inflate(R.layout.recentsticky, parent, false);
 
             holder = new ViewHolder();
 
@@ -66,22 +58,9 @@ public class RecentStickyAdapter extends ArrayAdapter<Sticky> {
         }
         
         String userID = sticky.getUserID();
-        if (userID.length() >= 20) {
-			userID = userID.substring(0, 20) + "...";
-		}
-        
-		String memo = sticky.getMemo();
-		//Log.i("naheon", "***" + memo);
-		if (memo.length() >= maxLength) {
-			memo = memo.substring(0, maxLength) + "...";
-		}
-		
+		String memo = sticky.getMemo();		
 		String url = sticky.getURL();
-		//Log.i("naheon", "***" + url);
-		if (url.length() >= maxLength) {
-			url = url.substring(0, maxLength) + "...";
-		}
-		
+
         holder.text1.setText(userID);
         holder.text2.setText(memo);
         holder.text3.setText(url);
