@@ -124,7 +124,8 @@ public class MemoCRUDActivity extends Activity {
 				case 0: // Create Memo
 					try {
 						String text = mEditText.getText().toString();
-						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
+//						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
+						String id = UserProfile.getInstacne(getApplicationContext()).getUserName();
 						Connection conn = mDBConnectionModule.getConnection();
 						mDBConnectionModule.writeSticky(Const.URL, id, text, conn);
 						

@@ -16,8 +16,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#999999"
         android:textSize="10sp"
-        android:maxLines="1"
-        android:ellipsize="end" />
+        android:ellipsize="end"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/memo"
