@@ -1,5 +1,6 @@
 package com.inha.stickyonpage.db;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  * Date: 10/14/13
  * Time: 2:14 PM
  */
-public class Sticky {
+public class Sticky implements Serializable { 
   private String url;
   private String userID;
   private String memo;

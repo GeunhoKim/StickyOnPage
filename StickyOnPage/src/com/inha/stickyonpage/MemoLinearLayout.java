@@ -7,19 +7,15 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.inha.stickyonpage.db.DBConnectionModule;
 import com.inha.stickyonpage.db.Sticky;
@@ -56,15 +52,7 @@ public class MemoLinearLayout extends LinearLayout {
 		addView(v);
 		
 		 ll = (LinearLayout)v.findViewById(R.id.memo_layout);
-	     ll.setOnClickListener(new OnClickListener() {
-				
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-					Toast.makeText(mContext, "touchtouch!!", Toast.LENGTH_LONG).show();
-			}
-		});
-	     
+	   
 	    mGridView = (GridView)v.findViewById(R.id.gridView1);
 	    mGridView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -73,7 +61,7 @@ public class MemoLinearLayout extends LinearLayout {
 					long id) {
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
 				i.putExtra(Const.MEMO_POSITION, position);
-				i.putExtra(Const.MEMO_CONTENTS, ((TextView)(view.findViewById(R.id.memo))).getText());
+				i.putExtra(Const.MEMO_INFO, stickies.get(position));
 				((Activity) mContext).startActivityForResult(i, Const.MEMO_REFRESH_CODE);
 			}
 	    });
@@ -109,7 +97,6 @@ public class MemoLinearLayout extends LinearLayout {
 		ProgressDialog mDialog;
 		DBConnectionModule mDBConnectionModule;
 		boolean isDialog;
-		List<Sticky> stickies;
 
 		MemoListAsyncTask(boolean isDialog){
 			this.isDialog = isDialog;

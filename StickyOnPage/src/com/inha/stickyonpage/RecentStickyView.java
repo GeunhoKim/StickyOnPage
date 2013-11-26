@@ -74,10 +74,9 @@ public class RecentStickyView extends Fragment {
 				TextView urlText = (TextView)view.findViewById(R.id.url_textview);
 				
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
-				i.putExtra(Const.MEMO_POSITION, 5); //i.putExtra(Const.MEMO_POSITION, 1);
-				i.putExtra(Const.MEMO_CONTENTS, memoText.getText());
-				i.putExtra(Const.MEMO_URL_FROM_MEMO_READ, urlText.getText());
-				((Activity) mContext).startActivityForResult(i, Const.MEMO_REFRESH_CODE);
+				i.putExtra(Const.MEMO_POSITION, 1); //i.putExtra(Const.MEMO_POSITION, 1);
+				i.putExtra(Const.MEMO_INFO, mStickyList.get(position));
+				((Activity) mContext).startActivity(i);
 			}
 		});
 

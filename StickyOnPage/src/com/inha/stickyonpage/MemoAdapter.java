@@ -71,23 +71,15 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 		StringBuffer sb = new StringBuffer();
 		
 		sb.append(stickies.get(position).getTimestamp())
-		.append(" ");
-	
-		if(stickies.get(position).getUserID().length() > 12)
-			sb.append(stickies.get(position).getUserID().substring(0, 12)).append("..");
-		else
-			sb.append(stickies.get(position).getUserID());
+		.append(" ")
+		.append(stickies.get(position).getUserID());
 		
 		return sb.toString();
 	}
 	
 	private String makeContent(int position) {
 		StringBuffer sb = new StringBuffer();
-		
-		if(stickies.get(position).getMemo().length() > 100)
-			sb.append(stickies.get(position).getMemo().substring(0, 100)).append("..");
-		else
-			sb.append(stickies.get(position).getMemo());
+		sb.append(stickies.get(position).getMemo());
 		
 		return sb.toString();
 	}

@@ -30,7 +30,8 @@ public class Connector {
                 TFramedTransport tf = new TFramedTransport(tr);
                 TProtocol proto = new TBinaryProtocol(tf);
                 Cassandra.Client client = new Cassandra.Client(proto);
-                tr.open();
+                if(!tr.isOpen())
+                	tr.open();
                 client.set_keyspace("sop_db_1");
 
                 return client;
@@ -40,7 +41,8 @@ public class Connector {
                 TFramedTransport tf = new TFramedTransport(tr);
                 TProtocol proto = new TBinaryProtocol(tf);
                 Cassandra.Client client = new Cassandra.Client(proto);
-                tr.open();
+                if(!tr.isOpen())
+                	tr.open();
                 client.set_keyspace(keyspace);
 
                 return client;

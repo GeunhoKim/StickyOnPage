@@ -75,7 +75,7 @@ public class BrowsingWebView extends Fragment {
 		    @Override
 		    public void onPageFinished(WebView view, String url) {
 		    	Const.URL = url;
-		    	if(getActivity()!=null)
+		    	if(getActivity() != null)
 		    		((UrlLinearLayout) getActivity().findViewById(R.id.drawer_right)).getUrlList();
 		    }
 		});
@@ -90,10 +90,9 @@ public class BrowsingWebView extends Fragment {
 		if (bundle != null) {
 			if (bundle.containsKey(Const.MEMO_URL_FROM_MEMO_LIST)) {
 				url = bundle.getString(Const.MEMO_URL_FROM_MEMO_LIST);
-			} else if (bundle.containsKey(Const.MEMO_URL_FROM_MEMO_READ)) {
-				url = bundle.getString(Const.MEMO_URL_FROM_MEMO_READ);
 			} else if (bundle.containsKey(Const.MEMO_URL_FROM_ACTIONBAR)) {
 				url = bundle.getString(Const.MEMO_URL_FROM_ACTIONBAR);
+				System.out.println("url = " + url);
 			} 
 		}
 		mWebView.loadUrl(url);
@@ -155,7 +154,6 @@ public class BrowsingWebView extends Fragment {
 		   		} else if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
 		   			mDrawerLayout.closeDrawer(Gravity.RIGHT);
 		   		}
-		   		
 		   		return true;
 		   	case R.id.browsing_home:
 		   		// reset action view

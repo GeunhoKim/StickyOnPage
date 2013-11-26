@@ -79,10 +79,10 @@ public class UrlLinearLayout extends LinearLayout {
 			try {
 				recommend_list = (TreeMap<Double, String>) mDBConnectionModule.getRecommendation(Const.URL);
 				
-				if(recommend_list.isEmpty()) {
+				if(recommend_list == null || recommend_list.isEmpty()) {
 					recommend_list = new TreeMap<Double, String>();
 					
-					recommend_list.put(0.1213, "http://m.naver.com");
+					recommend_list.put(0.1213, "http://m.naver.com/asdkfjkiajd1230910239012");
 					recommend_list.put(0.212312, "http://daum.net");
 					recommend_list.put(0.3123, "http://nate.com");
 					recommend_list.put(0.4111, "http://google.com");
