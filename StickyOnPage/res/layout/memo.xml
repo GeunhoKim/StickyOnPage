@@ -15,7 +15,9 @@
         android:paddingTop="10dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#999999"
-        android:textSize="10sp" />
+        android:textSize="10sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
 
     <TextView
         android:id="@+id/memo"
@@ -23,6 +25,8 @@
         android:layout_height="match_parent"
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp" />
+        android:paddingRight="10dp"
+        android:maxLines="7"
+        android:ellipsize="end" />
 
 </LinearLayout>
