@@ -18,7 +18,7 @@ public class UserProfile {
 		
 		setLoginStatus(mSharedPref.getString(Const.PREF_LOGINSTATUS, ""));
 		setUserId(mSharedPref.getString(Const.PREF_LOGINID, ""));
-		setUserName("");
+		setUserName(mSharedPref.getString(Const.PREF_LOGINNAME, ""));
 	}
 	
 	public static UserProfile getInstacne(Context context){

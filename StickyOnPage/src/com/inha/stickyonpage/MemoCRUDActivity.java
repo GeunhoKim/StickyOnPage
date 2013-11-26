@@ -125,7 +125,7 @@ public class MemoCRUDActivity extends Activity {
 					try {
 						String text = mEditText.getText().toString();
 						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
-						Connection conn = mDBConnectionModule.getConnection();	
+						Connection conn = mDBConnectionModule.getConnection();
 						mDBConnectionModule.writeSticky(Const.URL, id, text, conn);
 						
 					} catch (SQLException e) {

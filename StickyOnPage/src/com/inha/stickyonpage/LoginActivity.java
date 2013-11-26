@@ -106,7 +106,9 @@ public class LoginActivity extends Activity {
 			editor.putString(Const.PREF_KEY_OAUTH_SECRET, at.getTokenSecret());
 			editor.putString(Const.PREF_LOGINSTATUS, "Twitter");
 			try {
-				editor.putString(Const.PREF_LOGINID, Long.toString(twitter.getId()));
+				editor.putString(Const.PREF_LOGINID, "T"+Long.toString(twitter.getId()));
+				editor.putString(Const.PREF_LOGINNAME, (twitter.showUser(twitter.getId())).getName());
+				System.out.println((twitter.showUser(twitter.getId())).getName());
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -150,8 +152,8 @@ public class LoginActivity extends Activity {
 						mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
 						editor = mSharedPref.edit();
 						editor.putString(Const.PREF_LOGINSTATUS, "Facebook");
-						//editor.putString(Const.PREF_LOGINID, user.getId());
-						editor.putString(Const.PREF_LOGINID, user.getUsername());
+						editor.putString(Const.PREF_LOGINID, "F"+user.getId());
+						editor.putString(Const.PREF_LOGINNAME, user.getUsername());
 						editor.commit();
 					
 						Intent i = new Intent(LoginActivity.this, MainActivity.class);

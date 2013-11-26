@@ -13,8 +13,10 @@ public class Const {
     public static final String PREFERENCE = "oauth";
     public static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
     public static final String PREF_KEY_OAUTH_SECRET = "oauth_secret";
+    
     public static final String PREF_LOGINSTATUS = "login_status";
     public static String PREF_LOGINID = "login_id";
+    public static String PREF_LOGINNAME = "login_name";
     
     // Twitter Oauth 
     public static final String URL_TWITTER_AUTH = "auth_url";

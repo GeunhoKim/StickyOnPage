@@ -91,7 +91,6 @@ public class BrowsingWebView extends Fragment {
 				url = bundle.getString(Const.MEMO_URL_FROM_MEMO_LIST);
 			} else if (bundle.containsKey(Const.MEMO_URL_FROM_ACTIONBAR)) {
 				url = bundle.getString(Const.MEMO_URL_FROM_ACTIONBAR);
-				System.out.println("url = " + url);
 			} 
 		}
 		mWebView.loadUrl(url);
@@ -143,10 +142,10 @@ public class BrowsingWebView extends Fragment {
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-	   	switch(item.getItemId()) {
-		   	case R.id.browsing_next:
-		   		DrawerLayout mDrawerLayout = (DrawerLayout)mActivity.findViewById(R.id.drawer_layout);
-		   		
+		DrawerLayout mDrawerLayout = (DrawerLayout)mActivity.findViewById(R.id.drawer_layout);
+	   	
+		switch(item.getItemId()) {
+	   		case R.id.browsing_next:   		
 		   		if (!mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
 		   			mDrawerLayout.closeDrawer(Gravity.LEFT);
 		   			mDrawerLayout.openDrawer(Gravity.RIGHT);
@@ -158,7 +157,12 @@ public class BrowsingWebView extends Fragment {
 		   		// reset action view
 		   		mActionBar.setCustomView(null);
 				mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
-		   		
+				
+				if(mDrawerLayout.isDrawerOpen(Gravity.RIGHT) || mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+					mDrawerLayout.closeDrawer(Gravity.RIGHT);
+					mDrawerLayout.closeDrawer(Gravity.LEFT);
+				}
+
 		   		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 				RecentStickyView stickyFragment = new RecentStickyView();
 				stickyFragment.getRecentStickyAsyncTask();
