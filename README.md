@@ -6,13 +6,5 @@ Professor Han.
 
 Android Application Project
 
-# Contributor 
-
-Geuonho Kim
-
-Naheon Kim
-
-Sungwon Kim
-
-# Sticky on Page is URL based SNS. 
+Sticky on Page is URL based SNS. 
 
