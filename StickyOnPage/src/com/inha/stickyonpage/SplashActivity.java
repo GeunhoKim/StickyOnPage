@@ -17,8 +17,8 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.splash);
 		
-		SharedPreferences twitterPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
-		loginStatus = twitterPref.getString(Const.PREF_LOGINSTATUS, "");
+		SharedPreferences mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
+		loginStatus = mSharedPref.getString(Const.PREF_LOGINSTATUS, "");
 		
 		context = this;
 		

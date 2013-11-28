@@ -17,6 +17,7 @@ public class Const {
     public static final String PREF_LOGINSTATUS = "login_status";
     public static String PREF_LOGINID = "login_id";
     public static String PREF_LOGINNAME = "login_name";
+    public static String PREF_LOGINFRIENDS = "login_friends";
     
     // Twitter Oauth 
     public static final String URL_TWITTER_AUTH = "auth_url";
