@@ -1,5 +1,7 @@
 package com.inha.stickyonpage;
 
+import java.sql.Connection;
+
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -11,7 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,6 +25,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
+import com.inha.stickyonpage.db.DBConnectionModule;
 
 public class LoginActivity extends Activity {
 	
@@ -108,7 +110,6 @@ public class LoginActivity extends Activity {
 			try {
 				editor.putString(Const.PREF_LOGINID, "T"+Long.toString(twitter.getId()));
 				editor.putString(Const.PREF_LOGINNAME, (twitter.showUser(twitter.getId())).getName());
-				System.out.println((twitter.showUser(twitter.getId())).getName());
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -117,6 +118,16 @@ public class LoginActivity extends Activity {
 				e.printStackTrace();
 			}
 			editor.commit();
+			
+			
+			try {
+				Connection conn = DBConnectionModule.getConnection();
+				DBConnectionModule.getInstance().insertUser("T"+twitter.getId(), (twitter.showUser(twitter.getId())).getName(), conn);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			
 			return null;
 		}
@@ -148,6 +159,7 @@ public class LoginActivity extends Activity {
 					
 					@Override
 					public void onCompleted(GraphUser user, Response response) {
+						final GraphUser mUser = user; 
 						// TODO Auto-generated method stub
 						mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
 						editor = mSharedPref.edit();
@@ -156,6 +168,21 @@ public class LoginActivity extends Activity {
 						editor.putString(Const.PREF_LOGINNAME, user.getUsername());
 						editor.commit();
 					
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								try {
+									Connection conn = DBConnectionModule.getConnection();
+									DBConnectionModule.getInstance().insertUser("F"+mUser.getId(), mUser.getUsername(), conn);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						}).start();
+						
 						Intent i = new Intent(LoginActivity.this, MainActivity.class);
 						startActivity(i);
 						finish();

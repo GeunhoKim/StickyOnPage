@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -124,10 +125,10 @@ public class MemoCRUDActivity extends Activity {
 				case 0: // Create Memo
 					try {
 						String text = mEditText.getText().toString();
-//						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
-						String id = UserProfile.getInstacne(getApplicationContext()).getUserName();
+						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
+						String name = UserProfile.getInstacne(getApplicationContext()).getUserName();
 						Connection conn = mDBConnectionModule.getConnection();
-						mDBConnectionModule.writeSticky(Const.URL, id, text, conn);
+						mDBConnectionModule.writeSticky(Const.URL, id, text, name, conn);
 						
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
@@ -159,7 +160,8 @@ public class MemoCRUDActivity extends Activity {
 					try {
 						Connection conn = mDBConnectionModule.getConnection();
 						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
-						mDBConnectionModule.addPreference(id, sticky.getUserID(), Const.URL, conn);
+						Long created = sticky.getTimestamp().getTime();
+						mDBConnectionModule.addPreference(id, sticky.getUserID(), Const.URL, created, conn);
 						System.out.println("id : "+id);
 						System.out.println("fid : "+sticky.getUserID());
 					} catch (Exception e) {
@@ -192,7 +194,7 @@ public class MemoCRUDActivity extends Activity {
 					finish();
 					break;
 				case 4: // Good Memo
-					Toast.makeText(MemoCRUDActivity.this, "¿Ã Ω∫∆º≈∞∏¶ √ﬂ√µ«œø¥Ω¿¥œ¥Ÿ.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MemoCRUDActivity.this, "Ïù¥ Ïä§Ìã∞ÌÇ§Î•º Ï∂îÏ≤úÌïòÏòÄÏäµÎãàÎã§.", Toast.LENGTH_SHORT).show();
 					break;
 			}
 		}
@@ -201,7 +203,7 @@ public class MemoCRUDActivity extends Activity {
 			// TODO Auto-generated method stub
 			mDialog = new ProgressDialog(MemoCRUDActivity.this);
 			mDialog.setTitle("Sticky On Page");
-			mDialog.setMessage("¿·Ω√∏∏ ±‚¥Ÿ∑¡ ¡÷ººø‰");
+			mDialog.setMessage("Ïû†ÏãúÎßå Í∏∞Îã§Î†§Ï£ºÏÑ∏Ïöî.");
 			mDialog.setCancelable(false);
 			mDialog.show();
 		}

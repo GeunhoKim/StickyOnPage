@@ -31,7 +31,7 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 	}
 	
 	public void init(){
-		stickies.add(0, new Sticky("", "", "", null, 0));
+		stickies.add(0, new Sticky("", "", "", "", null, 0));
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 		
 		sb.append(stickies.get(position).getTimestamp())
 		.append(" ")
-		.append(stickies.get(position).getUserID());
+		.append(stickies.get(position).getUserName());
 		
 		return sb.toString();
 	}
