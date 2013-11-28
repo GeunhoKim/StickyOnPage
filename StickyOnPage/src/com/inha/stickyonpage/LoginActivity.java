@@ -121,7 +121,7 @@ public class LoginActivity extends Activity {
 			try {
 				long[] ids = twitter.getFriendsIDs(twitter.getId(), -1).getIDs();
 				for(int i=0; i<ids.length; i++) {
-					friendsList.add(ids[i]+"");
+					friendsList.add("T"+ids[i]);
 				}
 			} catch (IllegalStateException e1) {
 				// TODO Auto-generated catch block
@@ -247,7 +247,7 @@ public class LoginActivity extends Activity {
 						HashSet<String> friendsList = new HashSet<String>();
 						
 						for(int i=0; i<users.size(); i++) {
-							friendsList.add(users.get(i).getId());
+							friendsList.add("F"+users.get(i).getId());
 						}
 						
 						mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
