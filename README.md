@@ -1,7 +1,7 @@
 StickyOnPage
 ============
 
-Inha-University Capstone Project
+Inha-University Capstone Project,
 Professor Han.
 
 Android Application Project
