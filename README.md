@@ -14,5 +14,5 @@ Naheon Kim
 
 Sungwon Kim
 
-# Sticky on Page is Url based SNS. 
+# Sticky on Page is URL based SNS. 
 
