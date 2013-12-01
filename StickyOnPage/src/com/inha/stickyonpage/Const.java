@@ -13,8 +13,11 @@ public class Const {
     public static final String PREFERENCE = "oauth";
     public static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
     public static final String PREF_KEY_OAUTH_SECRET = "oauth_secret";
+    
     public static final String PREF_LOGINSTATUS = "login_status";
     public static String PREF_LOGINID = "login_id";
+    public static String PREF_LOGINNAME = "login_name";
+    public static String PREF_LOGINFRIENDS = "login_friends";
     
     // Twitter Oauth 
     public static final String URL_TWITTER_AUTH = "auth_url";
@@ -29,9 +32,10 @@ public class Const {
     public static final String MEMO_CONTENTS = "memo_contents";
     public static final String MEMO_INFO = "memo_info";
     public static final String MEMO_URL_FROM_MEMO_LIST = "memo_url_from_memo_list";
-//    public static final String MEMO_URL_FROM_MEMO_READ = "memo_url_from_memo_read";
     public static final String MEMO_URL_FROM_ACTIONBAR = "memo_url_from_actionbar";
     public static final int MEMO_REFRESH_CODE = 123;
+    //  public static final String MEMO_URL_FROM_MEMO_READ = "memo_url_from_memo_read";
+    
     
     
     public static final String HOME_URL = "http://m.daum.net/";

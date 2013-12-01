@@ -13,7 +13,7 @@ public class LoginWebView extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.webview);
+		setContentView(R.layout.login_webview);
 	
 		String url = (String)getIntent().getExtras().get("URL");
 		WebView mView = (WebView)findViewById(R.id.webView1);

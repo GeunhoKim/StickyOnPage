@@ -4,22 +4,26 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Geunho Khim
- * Date: 10/14/13
- * Time: 2:14 PM
+ * @author  Geunho Khim
+ * @created 10/14/13, 2:14 PM
+ * @updated 11/27/13
+ *
+ *  default comparable property is timestamp.
  */
-public class Sticky implements Serializable { 
+public class Sticky implements Comparable<Sticky>, Serializable {
   private String url;
   private String userID;
+  private String userName;
   private String memo;
   private Date created;
   private int like;
 
   public Sticky() {
   }
-  public Sticky(String url, String userID, String memo, Date created, int like) {
+  public Sticky(String url, String userID, String userName, String memo, Date created, int like) {
     this.url = url;
     this.userID = userID;
+    this.userName = userName;
     this.memo = memo;
     this.created = created;
     this.like = like;
@@ -30,6 +34,9 @@ public class Sticky implements Serializable {
   }
   public void setUser(String userID) {
     this.userID = userID;
+  }
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
   public void setMemo(String memo) {
     this.memo = memo;
@@ -47,6 +54,9 @@ public class Sticky implements Serializable {
   public String getUserID() {
     return this.userID;
   }
+  public String getUserName() {
+    return this.userName;
+  }
   public String getMemo() {
     return this.memo;
   }
@@ -59,6 +69,17 @@ public class Sticky implements Serializable {
 
   @Override
   public String toString() {
-    return getURL() + ", " + getUserID() + ", " + getMemo() + ", " + getTimestamp();
+    return "[" + getURL() + ", " + getUserID() + ", " + getUserName() + ", " + getMemo() + ", " + getTimestamp() + "]";
+  }
+
+  // compare class by timestamp
+  @Override
+  public int compareTo(Sticky sticky) {
+    long a = this.getTimestamp().getTime();
+    long b = sticky.getTimestamp().getTime();
+
+    return a < b ? -1
+         : a > b ? 1
+         : 0;
   }
 }

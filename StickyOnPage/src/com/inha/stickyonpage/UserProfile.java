@@ -1,5 +1,7 @@
 package com.inha.stickyonpage;
 
+import java.util.HashSet;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -8,7 +10,8 @@ public class UserProfile {
 	private String userId;
 	private String userName;
 	private String loginStatus;
-
+	private HashSet<String> friendsList; 
+	
 	private static UserProfile instance; 
 	
 	private UserProfile(Context context) {
@@ -18,7 +21,8 @@ public class UserProfile {
 		
 		setLoginStatus(mSharedPref.getString(Const.PREF_LOGINSTATUS, ""));
 		setUserId(mSharedPref.getString(Const.PREF_LOGINID, ""));
-		setUserName("");
+		setUserName(mSharedPref.getString(Const.PREF_LOGINNAME, ""));
+		setFriendsList((HashSet<String>) mSharedPref.getStringSet(Const.PREF_LOGINFRIENDS, null));
 	}
 	
 	public static UserProfile getInstacne(Context context){
@@ -52,11 +56,17 @@ public class UserProfile {
 		this.loginStatus = loginStatus;
 	}
 
+	public HashSet<String> getFriendsList() {
+		return friendsList;
+	}
+
+	public void setFriendsList(HashSet<String> friendsList) {
+		this.friendsList = friendsList;
+	}
+	
 	@Override
 	public String toString() {
 		return "UserProfile [userId=" + userId + ", userName=" + userName
 				+ ", loginStatus=" + loginStatus + "]";
 	}
-	
-	
 }
