@@ -11,6 +11,7 @@
 	<string name="recent_sticky_str1">&#160;put Sticky</string>
 	<string name="recent_sticky_str2">on&#160;</string>
 	<string name="browser_hint">http://m.daum.net/</string>
+	<string name="scroll_no_friends">Oops!\nNone of your frineds use Sticky on Page. :(</string>
     
 	<string name="recent_search_str">Search</string>
 	<string name="recent_overflow_str">More</string>

@@ -94,7 +94,6 @@ public class MainActivity extends FragmentActivity {
 //			ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
 //		} else {
 		RecentStickyView stickyFragment = new RecentStickyView();
-		stickyFragment.getRecentStickyAsyncTask();
 		ft.add(R.id.drawer_main, stickyFragment, "RecentStickyView");
 //		}
         ft.commit();
@@ -163,7 +162,7 @@ public class MainActivity extends FragmentActivity {
     			return false;
     		} else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
     	        if(!mFlag) {
-    	            Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+    	            Toast.makeText(this, "'�ㅻ줈'踰꾪듉 �쒕쾲 ���꾨Ⅴ�쒕㈃ 醫낅즺�⑸땲��", Toast.LENGTH_SHORT).show();
     	            mFlag = true;
     	            mHandler.sendEmptyMessageDelayed(0, 2000);
     	            return false;

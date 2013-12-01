@@ -24,9 +24,8 @@ public class RecentStickyAdapter extends ArrayAdapter<Sticky> {
         }
     }
 
-    /** Inflater for list items */
     private final LayoutInflater inflater;
-    private final int maxLength = 27;
+    //private final int maxLength = 27;
 
     public RecentStickyAdapter (final Context context,
             final int textViewResourceId,
@@ -57,11 +56,11 @@ public class RecentStickyAdapter extends ArrayAdapter<Sticky> {
             holder = (ViewHolder)itemView.getTag();
         }
         
-        String userID = sticky.getUserID();
+        String userName = sticky.getUserName();
 		String memo = sticky.getMemo();		
 		String url = sticky.getURL();
 
-        holder.text1.setText(userID);
+        holder.text1.setText(userName);
         holder.text2.setText(memo);
         holder.text3.setText(url);
 
