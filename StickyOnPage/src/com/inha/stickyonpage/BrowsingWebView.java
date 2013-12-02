@@ -32,14 +32,17 @@ public class BrowsingWebView extends Fragment {
 	Button mButton;
 	EditText mText;
 	Activity mActivity;
+	DrawerLayout mDrawerLayout;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
 		View view = inflater.inflate(R.layout.webview, container, false);
-		mActivity = getActivity();
 		
+		mActivity = getActivity();
+		mDrawerLayout = (DrawerLayout)mActivity.findViewById(R.id.drawer_layout);
+	   	
 		mText = (EditText)view.findViewById(R.id.browser_url);
 		mButton = (Button)view.findViewById(R.id.browser_button);
 		mButton.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +128,9 @@ public class BrowsingWebView extends Fragment {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				// TODO Auto-generated method stub
+					if(mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+						mDrawerLayout.closeDrawer(Gravity.RIGHT);
+					}
 					String url = ((TextView) arg1.findViewById(R.id.recommend_url)).getText().toString();
 					mWebView.loadUrl(url);
 			}
@@ -140,8 +146,7 @@ public class BrowsingWebView extends Fragment {
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-		DrawerLayout mDrawerLayout = (DrawerLayout)mActivity.findViewById(R.id.drawer_layout);
-	   	
+		
 		switch(item.getItemId()) {
 	   		case R.id.browsing_next:   		
 		   		if (!mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
@@ -163,7 +168,6 @@ public class BrowsingWebView extends Fragment {
 
 		   		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 				RecentStickyView stickyFragment = new RecentStickyView();
-				stickyFragment.getRecentStickyAsyncTask();
 		        ft.replace(R.id.drawer_main, stickyFragment, "RecentStickyView");
 		        ft.commit();
 		   		return true;
