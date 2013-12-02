@@ -78,8 +78,8 @@ public class Sticky implements Comparable<Sticky>, Serializable {
     long a = this.getTimestamp().getTime();
     long b = sticky.getTimestamp().getTime();
 
-    return a < b ? -1
-         : a > b ? 1
+    return a < b ? 1
+         : a > b ? -1
          : 0;
   }
 }

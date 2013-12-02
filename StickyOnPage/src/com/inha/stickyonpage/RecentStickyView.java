@@ -70,7 +70,6 @@ public class RecentStickyView extends Fragment {
 		
 		// Set list view
 		mNoFriend = (TextView)view.findViewById(R.id.scroll_text);
-		mStickyList = new ArrayList<Sticky>();
 		
 		mScrollView = (ScrollView)view.findViewById(R.id.scroll_view);
 		mListView = (ListView)view.findViewById(R.id.list_view);
@@ -175,23 +174,21 @@ public class RecentStickyView extends Fragment {
 		@Override
 		protected Integer doInBackground(Integer... params) {
 			Connection conn;
-			List<String> myFriends = null;
-			UserProfile userProfile = UserProfile.getInstacne(mContext);
-
+			HashSet<String> friendsList = UserProfile.getInstacne(mContext).getFriendsList();
+			mStickyList = new ArrayList<Sticky>(); // init
+			
 			try {
 				conn = mDBConnectionModule.getConnection();
 				
-				if (userProfile != null) {
-					myFriends = mDBConnectionModule.getFriendsOfSOPUser(new ArrayList<String>(userProfile.getFriendsList()), conn);
-					Iterator<String> iterator = myFriends.iterator();
-					
-					while (iterator.hasNext()) {
-						Sticky sticky = mDBConnectionModule.getLatestSticky(iterator.next(), conn);
-						if (sticky != null) {
-							mStickyList.add((Sticky)sticky);
-						}
+				Iterator<String> iterator = friendsList.iterator();
+				
+				while (iterator.hasNext()) {
+					Sticky sticky = mDBConnectionModule.getLatestSticky(iterator.next(), conn);
+					if (sticky != null) {
+						mStickyList.add(sticky);
 					}
 				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -218,7 +215,7 @@ public class RecentStickyView extends Fragment {
 		private void showProgress() {
 			mDialog = new ProgressDialog(getActivity());
 			mDialog.setTitle("Sticky On Page");
-			mDialog.setMessage("Àá½Ã¸¸ ±â´Ù·Á ÁÖ¼¼¿ä");
+			mDialog.setMessage("ìž ì‹œë§Œ ê¸°ë‹¤ë ¤ ì£¼ì„¸ìš”.");
 			mDialog.setCancelable(false);
 			mDialog.show();
 		}

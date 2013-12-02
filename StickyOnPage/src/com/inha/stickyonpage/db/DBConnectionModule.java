@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * @author  Geunho Khim
  * @created 10/11/13, 6:43 PM
- * @updated 11/28/13
+ * @updated 12/2/13
  *
  *  Cassandra database controller for Sticky On Page
  */
@@ -281,13 +281,14 @@ public class DBConnectionModule {
 
     try {
       stmt = conn.createStatement();
-      countLike(url, user_id, created, stmt, conn);
+      countLike(url, f_id, created, stmt, conn);
 
       long ts = System.currentTimeMillis();
       String query = "insert into \"Preference\"(user_id, f_id, url, created) values('" + user_id +"','"+ f_id + "','" + url + "'," + ts + ");";
       System.out.println(query);
-      stmt.executeUpdate(query);
-
+      int m = stmt.executeUpdate(query);
+      System.out.println("insert return value : "+m);
+      
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -309,7 +310,7 @@ public class DBConnectionModule {
    *
    * @param   limit, connection
    * @return  list of URL
-   * @throws SQLException
+   * @throws  SQLException
    *
    *  get URL list limit (for test)
    */
@@ -408,12 +409,12 @@ public class DBConnectionModule {
 
   /**
    *
-   * @param userID, url
-   * @throws TException
-   * @throws InvalidRequestException
-   * @throws UnsupportedEncodingException
-   * @throws UnavailableException
-   * @throws TimedOutException
+   * @param   userID, url
+   * @throws  TException
+   * @throws  InvalidRequestException
+   * @throws  UnsupportedEncodingException
+   * @throws  UnavailableException
+   * @throws  TimedOutException
    */
   private void addUrlToUser(String userID, String url)
           throws TException, InvalidRequestException, UnsupportedEncodingException, UnavailableException, TimedOutException {
@@ -444,8 +445,7 @@ public class DBConnectionModule {
     try {
       stmt = conn.createStatement();
       String query = "select count(*) from \"User\" where key = '" + user_id + "';";
-      stmt.executeQuery(query);
-      rs = stmt.getResultSet();
+      rs = stmt.executeQuery(query);
 
       if(rs.getInt(1) == 1) {
         return true;
@@ -546,7 +546,6 @@ public class DBConnectionModule {
 
     sticky.setTimestamp(new Date(Long.parseLong(parsed[0])));
     sticky.setURL(parsed[1]);
-    //sticky.setUser(parsed[2]);
     sticky.setUserName(parsed[2]);
     sticky.setMemo(parsed[3]);
 
@@ -581,7 +580,7 @@ public class DBConnectionModule {
 
     return count;
   }
-  
+
   /**
    *
    * @param   list of friends, conn
@@ -595,8 +594,8 @@ public class DBConnectionModule {
    *
    *  method removes all non SOP user from parameter of friend list
    */
-  public List<String> getFriendsOfSOPUser(List<String> friends, Connection conn) throws SQLException {
-    Iterator<String> it = friends.listIterator();
+  public HashSet<String> getFriendsOfSOPUser(HashSet<String> friends, Connection conn) throws SQLException {
+    Iterator<String> it = friends.iterator();
 
     while(it.hasNext()) {
       String user_id = it.next();
@@ -604,6 +603,38 @@ public class DBConnectionModule {
         it.remove();                    //+ remove that user from list
       }
     }
+
     return friends;
   }
+
+  /**
+   *
+   * @param   column family, conn
+   * @return  count of column family
+   * @throws  SQLException
+   *
+   *  get count of column family.
+   *
+   *  Sticky On Page's cf = {Sticky, User, URL, Recommendation, Preference}
+   *    warning: case sensitive!
+   */
+  public int getCFCount(String cf, Connection conn) throws SQLException {
+    Statement stmt = null;
+    int count = 0;
+
+    try {
+      stmt = conn.createStatement();
+      String query = "select count(*) from \"" + cf + "\"";
+      count = stmt.executeQuery(query).getInt(1);
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    stmt.close();
+
+    return count;
+  }
+
 }

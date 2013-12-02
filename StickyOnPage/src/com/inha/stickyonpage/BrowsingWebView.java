@@ -66,7 +66,7 @@ public class BrowsingWebView extends Fragment {
 		    @Override
 		    public void onPageStarted(WebView view, String url, Bitmap favicon) {
 		    	Const.URL = url;
-		    	((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList();
+		    	((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList(0);
 		    	mText.setText(url);
 		    }
 		    

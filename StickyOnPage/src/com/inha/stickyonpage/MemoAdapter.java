@@ -1,5 +1,6 @@
 package com.inha.stickyonpage;
 
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -31,7 +32,7 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 	}
 	
 	public void init(){
-		stickies.add(0, new Sticky("", "", "", "", null, 0));
+		stickies.add(0, new Sticky("", "", "", "", new Date(Long.MAX_VALUE), Integer.MAX_VALUE));
 	}
 
 	@Override

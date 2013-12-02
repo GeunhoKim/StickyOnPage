@@ -162,8 +162,6 @@ public class MemoCRUDActivity extends Activity {
 						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
 						Long created = sticky.getTimestamp().getTime();
 						mDBConnectionModule.addPreference(id, sticky.getUserID(), Const.URL, created, conn);
-						System.out.println("id : "+id);
-						System.out.println("fid : "+sticky.getUserID());
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
