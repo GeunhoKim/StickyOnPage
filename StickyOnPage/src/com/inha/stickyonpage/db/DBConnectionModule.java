@@ -275,13 +275,24 @@ public class DBConnectionModule {
    *  method usage:
    *   - store preferences of users (like logs)
    *   - count like column in Sticky cf
+   *
+   *   additional check:
+   *   - if user already press like button on sticky, than return false
+   *   - if addPreference is succeed, return true
    */
-  public void addPreference(String user_id, String f_id, String url, long created, Connection conn) throws SQLException {
+  public boolean addPreference(String user_id, String f_id, String url, long created, Connection conn) throws SQLException {
     Statement stmt = null;
 
     try {
       stmt = conn.createStatement();
-      countLike(url, f_id, created, stmt, conn);
+
+      // check if preference already exists
+      if(isPrefExist(user_id, f_id, url, stmt)) {
+        return false;
+      }
+
+      // count like column in Sticky cf
+      countLike(url, f_id, created, stmt);
 
       long ts = System.currentTimeMillis();
       String query = "insert into \"Preference\"(user_id, f_id, url, created) values('" + user_id +"','"+ f_id + "','" + url + "'," + ts + ");";
@@ -294,9 +305,19 @@ public class DBConnectionModule {
     }
 
     stmt.close();
+
+    return true;
   }
 
-  private void countLike(String url, String userID, long created, Statement stmt, Connection conn) throws SQLException {
+  private boolean isPrefExist(String user_id, String f_id, String url, Statement stmt) throws SQLException {
+    String query = "select count(*) from \"Preference\" where user_id = '" + user_id +"' and f_id = '" + f_id + "' and url = '" + url + "';";
+    if(stmt.executeQuery(query).getInt(1) > 0)
+      return true;
+
+    return false;
+  }
+
+  private void countLike(String url, String userID, long created, Statement stmt) throws SQLException {
 
     String query = "select like from \"Sticky\" where url = '" + url + "' and user_id = '" + userID + "' and created = " + created + ";";
     System.out.println(query);
