@@ -546,7 +546,8 @@ public class DBConnectionModule {
 
     sticky.setTimestamp(new Date(Long.parseLong(parsed[0])));
     sticky.setURL(parsed[1]);
-    sticky.setUser(parsed[2]);
+    //sticky.setUser(parsed[2]);
+    sticky.setUserName(parsed[2]);
     sticky.setMemo(parsed[3]);
 
     return sticky;
@@ -580,5 +581,29 @@ public class DBConnectionModule {
 
     return count;
   }
+  
+  /**
+   *
+   * @param   list of friends, conn
+   * @return  friend list who registered in User cf
+   * @throws  SQLException
+   *
+   *  get friends of Sticky On Page user.
+   *
+   *  usage:
+   *    friends = dbcm.getFriendOfSOPUser(friends, dbcm.getConnection());
+   *
+   *  method removes all non SOP user from parameter of friend list
+   */
+  public List<String> getFriendsOfSOPUser(List<String> friends, Connection conn) throws SQLException {
+    Iterator<String> it = friends.listIterator();
 
+    while(it.hasNext()) {
+      String user_id = it.next();
+      if(!isUserExist(user_id, conn)) { // if user does not exist,
+        it.remove();                    //+ remove that user from list
+      }
+    }
+    return friends;
+  }
 }

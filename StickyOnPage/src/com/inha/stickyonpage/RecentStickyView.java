@@ -1,9 +1,13 @@
 package com.inha.stickyonpage;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import com.inha.stickyonpage.db.DBConnectionModule;
+import com.inha.stickyonpage.db.HelperClass;
 import com.inha.stickyonpage.db.Sticky;
 
 import android.app.ActionBar;
@@ -11,6 +15,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +40,7 @@ import android.widget.TextView;
 
 public class RecentStickyView extends Fragment {
 
+	private Activity mActivity;
 	private RecentStickyAdapter mAdapter;
 	private Button mButton;
 	private Context mContext;
@@ -42,20 +48,30 @@ public class RecentStickyView extends Fragment {
 	private ScrollView mScrollView;
 	private List<Sticky> mStickyList;
 	private EditText mText;
+	private TextView mNoFriend;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.recentsticky_list, container, false);
-				
-		mContext = getActivity();
+		getRecentStickyAsyncTask(); // moved from main activity
+		
+		//mContext = getActivity();
+		mActivity = getActivity();
+		mContext = getActivity().getApplicationContext();
 		
 		Const.URL = Const.HOME_URL;
 		
+		// Set action bar
 		setHasOptionsMenu(true);
-		ActionBar mActionBar = ((Activity)mContext).getActionBar();
+		//ActionBar mActionBar = ((Activity)mContext).getActionBar();
+		ActionBar mActionBar = (mActivity).getActionBar();
 		mActionBar.setDisplayShowTitleEnabled(false);
-		 
+		
+		// Set list view
+		mNoFriend = (TextView)view.findViewById(R.id.scroll_text);
+		mStickyList = new ArrayList<Sticky>();
+		
 		mScrollView = (ScrollView)view.findViewById(R.id.scroll_view);
 		mListView = (ListView)view.findViewById(R.id.list_view);
 		mListView.setBackgroundColor(Color.WHITE);
@@ -76,9 +92,9 @@ public class RecentStickyView extends Fragment {
 				TextView urlText = (TextView)view.findViewById(R.id.url_textview);
 				
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
-				i.putExtra(Const.MEMO_POSITION, 1); //i.putExtra(Const.MEMO_POSITION, 1);
+				i.putExtra(Const.MEMO_POSITION, 1);
 				i.putExtra(Const.MEMO_INFO, mStickyList.get(position));
-				((Activity) mContext).startActivity(i);
+				(mActivity).startActivity(i);
 			}
 		});
 
@@ -131,17 +147,7 @@ public class RecentStickyView extends Fragment {
 			}
 		});
 	}
-	
-	/*
-	 @Override
-     public boolean onOptionsItemSelected(MenuItem item) {
-    	switch(item.getItemId()) {
-    	default:
-    		return super.onOptionsItemSelected(item);
-    	}
-    }
-    */
-	
+
 	public void getRecentStickyAsyncTask(){
 		new RecentStickyAsyncTask(false).execute(new Integer[]{0});
 	}
@@ -163,16 +169,32 @@ public class RecentStickyView extends Fragment {
 			}
 		};
 		
+		/**
+		 * Get sticky list from DBConnectionModule in background
+		 */
 		@Override
 		protected Integer doInBackground(Integer... params) {
 			Connection conn;
+			List<String> myFriends = null;
+			UserProfile userProfile = UserProfile.getInstacne(mContext);
+
 			try {
 				conn = mDBConnectionModule.getConnection();
-				//mStickyList = mDBConnectionModule.getAllStickies("http://m.daum.net/", conn);
-				mStickyList = mDBConnectionModule.getAllStickies(conn);
+				
+				if (userProfile != null) {
+					myFriends = mDBConnectionModule.getFriendsOfSOPUser(new ArrayList<String>(userProfile.getFriendsList()), conn);
+					Iterator<String> iterator = myFriends.iterator();
+					
+					while (iterator.hasNext()) {
+						Sticky sticky = mDBConnectionModule.getLatestSticky(iterator.next(), conn);
+						if (sticky != null) {
+							mStickyList.add((Sticky)sticky);
+						}
+					}
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			}	
+			}
 
 			return params[0];
 		}
@@ -183,8 +205,14 @@ public class RecentStickyView extends Fragment {
 				hideProgress();
 			}
 
-			mAdapter = new RecentStickyAdapter(getActivity(), R.layout.recentsticky, mStickyList);
-			mListView.setAdapter(mAdapter);
+			if (mStickyList.size() != 0) {
+				mNoFriend.setVisibility(View.GONE);
+				mAdapter = new RecentStickyAdapter(getActivity(), R.layout.recentsticky, mStickyList);
+				mListView.setAdapter(mAdapter);
+			} else {
+				mListView.setVisibility(View.INVISIBLE);
+				mNoFriend.setVisibility(View.VISIBLE);
+			}
 		}
 		
 		private void showProgress() {
