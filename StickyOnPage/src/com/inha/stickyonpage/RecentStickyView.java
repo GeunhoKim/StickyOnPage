@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.inha.stickyonpage.db.DBConnectionModule;
-import com.inha.stickyonpage.db.HelperClass;
 import com.inha.stickyonpage.db.Sticky;
 
 import android.app.ActionBar;
@@ -15,13 +14,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -176,7 +172,7 @@ public class RecentStickyView extends Fragment {
 		
 		protected void onPreExecute() {
 			mDBConnectionModule = DBConnectionModule.getInstance();
-			mProfile = UserProfile.getInstacne(mContext);
+			mProfile = UserProfile.getInstance(mContext);
 			
 			if (isDialog) {
 				showProgress();

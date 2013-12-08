@@ -25,7 +25,7 @@ public class UserProfile {
 		setFriendsList((HashSet<String>) mSharedPref.getStringSet(Const.PREF_LOGINFRIENDS, null));
 	}
 	
-	public static UserProfile getInstacne(Context context){
+	public static UserProfile getInstance(Context context){
 		
 		if(instance == null)
 			instance = new UserProfile(context);

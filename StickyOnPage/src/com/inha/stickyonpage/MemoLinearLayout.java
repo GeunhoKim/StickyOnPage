@@ -123,12 +123,12 @@ public class MemoLinearLayout extends LinearLayout {
 				case 0: // first load
 					Connection conn;
 					try {
-						HashSet<String> friendsList = UserProfile.getInstacne(mContext).getFriendsList();
+						HashSet<String> friendsList = UserProfile.getInstance(mContext).getFriendsList();
 						Iterator<String> it = friendsList.iterator();
 						
 						conn = mDBConnectionModule.getConnection();
 						
-						stickies = mDBConnectionModule.getStickies(Const.URL, UserProfile.getInstacne(mContext).getUserId(), conn);
+						stickies = mDBConnectionModule.getStickies(Const.URL, UserProfile.getInstance(mContext).getUserId(), conn);
 						while(it.hasNext()) {
 							stickies.addAll(mDBConnectionModule.getStickies(Const.URL, it.next(), conn));
 						}
