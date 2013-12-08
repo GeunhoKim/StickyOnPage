@@ -549,6 +549,9 @@ public class DBConnectionModule {
       stmt = conn.createStatement();
       String query = "select uptodate from \"User\" where key = '" + userID + "';";
       uptodate = stmt.executeQuery(query).getString(1);
+      // fix this:
+      // W/System.err(21176):
+      // java.sql.SQLSyntaxErrorException: index must be a positive number less or equal the count of returned columns: 1 0
       sticky = parseUptodate(uptodate);
       sticky.setUser(userID);
 

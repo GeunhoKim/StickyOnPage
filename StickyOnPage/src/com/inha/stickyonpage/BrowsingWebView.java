@@ -1,12 +1,19 @@
 package com.inha.stickyonpage;
 
+import java.sql.Connection;
+
+import com.inha.stickyonpage.db.DBConnectionModule;
+
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +38,7 @@ public class BrowsingWebView extends Fragment {
 	WebView mWebView;
 	Button mButton;
 	EditText mText;
+	TextView mStickyCount;
 	Activity mActivity;
 	DrawerLayout mDrawerLayout;
 	
@@ -42,7 +50,8 @@ public class BrowsingWebView extends Fragment {
 		
 		mActivity = getActivity();
 		mDrawerLayout = (DrawerLayout)mActivity.findViewById(R.id.drawer_layout);
-	   	
+		
+		mStickyCount = (TextView)view.findViewById(R.id.browser_sticky_count);
 		mText = (EditText)view.findViewById(R.id.browser_url);
 		mButton = (Button)view.findViewById(R.id.browser_button);
 		mButton.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +77,9 @@ public class BrowsingWebView extends Fragment {
 		    	Const.URL = url;
 		    	((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList(0);
 		    	mText.setText(url);
+		    	
+			   	// Set sticky count
+				new BrowsingAsyncTask().execute(url);
 		    }
 		    
 		    @Override
@@ -92,7 +104,7 @@ public class BrowsingWebView extends Fragment {
 			} 
 		}
 		mWebView.loadUrl(url);
-		
+				
 		// Action Bar
 		setHasOptionsMenu(true);
 		mActionBar = mActivity.getActionBar();
@@ -124,7 +136,6 @@ public class BrowsingWebView extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				// TODO Auto-generated method stub
 					if(mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
 						mDrawerLayout.closeDrawer(Gravity.RIGHT);
 					}
@@ -171,5 +182,31 @@ public class BrowsingWebView extends Fragment {
 		   	default:
 		   		return super.onOptionsItemSelected(item);
 	   	}
-   }
+    }
+	
+	private class BrowsingAsyncTask extends AsyncTask<String, Integer, Integer> {
+		private DBConnectionModule mDBConnectionModule;
+		private int stickyCount;
+		
+		protected void onPreExecute() {
+			mDBConnectionModule = DBConnectionModule.getInstance();
+		}
+		
+		@Override
+		protected Integer doInBackground(String... arg0) {
+			Connection conn;
+			try {
+				conn = mDBConnectionModule.getConnection();
+				stickyCount = mDBConnectionModule.getURLStickyCount(arg0[0], conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return stickyCount;
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			mStickyCount.setText(result.toString());
+		}
+	}
 }
