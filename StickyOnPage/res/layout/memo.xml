@@ -3,7 +3,7 @@
     android:id="@+id/memo_linear"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:background="#f9f74a"
+    android:background="#FFFFBF"
     android:orientation="vertical" >
 
     <TextView

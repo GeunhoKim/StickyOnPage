@@ -105,7 +105,7 @@ public class MainActivity extends FragmentActivity {
         uiHelper.onActivityResult(requestCode, resultCode, data);
         
         if(requestCode == Const.MEMO_REFRESH_CODE && resultCode == RESULT_OK){
-        	mMemoLinearLayout.getMemoList();
+        	mMemoLinearLayout.getMemoList(0);
         }
     }
 
@@ -162,7 +162,7 @@ public class MainActivity extends FragmentActivity {
     			return false;
     		} else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
     	        if(!mFlag) {
-    	            Toast.makeText(this, "'�ㅻ줈'踰꾪듉 �쒕쾲 ���꾨Ⅴ�쒕㈃ 醫낅즺�⑸땲��", Toast.LENGTH_SHORT).show();
+    	            Toast.makeText(this, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
     	            mFlag = true;
     	            mHandler.sendEmptyMessageDelayed(0, 2000);
     	            return false;

@@ -108,6 +108,7 @@ public class MemoCRUDActivity extends Activity {
 		ProgressDialog mDialog;
 		DBConnectionModule mDBConnectionModule;
 		boolean isDialog;
+		boolean isGood;
 		
 		MemoCRUDAsyncTask(boolean isDialog){
 			this.isDialog = isDialog;
@@ -162,9 +163,7 @@ public class MemoCRUDActivity extends Activity {
 						Connection conn = mDBConnectionModule.getConnection();
 						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
 						Long created = sticky.getTimestamp().getTime();
-						mDBConnectionModule.addPreference(id, sticky.getUserID(), Const.URL, created, conn);
-						System.out.println("id : "+id);
-						System.out.println("fid : "+sticky.getUserID());
+						isGood = mDBConnectionModule.addPreference(id, sticky.getUserID(), Const.URL, created, conn);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -195,7 +194,10 @@ public class MemoCRUDActivity extends Activity {
 					finish();
 					break;
 				case 4: // Good Memo
-					Toast.makeText(MemoCRUDActivity.this, "���ㅽ떚�ㅻ� 異붿쿇�섏��듬땲��", Toast.LENGTH_SHORT).show();
+					if(isGood)
+						Toast.makeText(MemoCRUDActivity.this, "이 스티키를 추천하였습니다.", Toast.LENGTH_SHORT).show();
+					else
+						Toast.makeText(MemoCRUDActivity.this, "추천은 한번만 가능합니다.", Toast.LENGTH_SHORT).show();
 					break;
 			}
 		}

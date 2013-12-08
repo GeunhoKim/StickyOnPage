@@ -45,6 +45,8 @@ public class LoginActivity extends Activity {
     };
     
     private boolean isResumed = false;
+    HashSet<String> friendsList = new HashSet<String>();
+    
     
 	// Twitter variable
 	Twitter twitter;
@@ -117,21 +119,25 @@ public class LoginActivity extends Activity {
 				e.printStackTrace();
 			}
 			
-			HashSet<String> friendsList = new HashSet<String>();
 			try {
 				long[] ids = twitter.getFriendsIDs(twitter.getId(), -1).getIDs();
 				for(int i=0; i<ids.length; i++) {
 					friendsList.add("T"+ids[i]);
 				}
+				
+				Connection conn = DBConnectionModule.getConnection();
+				friendsList = DBConnectionModule.getInstance().getFriendsOfSOPUser(friendsList, conn);
+				
 			} catch (IllegalStateException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (TwitterException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			
 			
 			mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
 			editor = mSharedPref.edit();
@@ -244,22 +250,36 @@ public class LoginActivity extends Activity {
 					@Override
 					public void onCompleted(List<GraphUser> users, Response response) {
 						// TODO Auto-generated method stub
-						HashSet<String> friendsList = new HashSet<String>();
-						
+					
 						for(int i=0; i<users.size(); i++) {
 							friendsList.add("F"+users.get(i).getId());
 						}
 						
-						mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
-						editor = mSharedPref.edit();
-						editor.putStringSet(Const.PREF_LOGINFRIENDS, friendsList);
-						editor.commit();
-						
-						mDialog.cancel();
-						
-						Intent i = new Intent(LoginActivity.this, MainActivity.class);
-						startActivity(i);
-						finish();
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								try {
+									Connection conn = DBConnectionModule.getConnection();
+									friendsList = DBConnectionModule.getInstance().getFriendsOfSOPUser(friendsList, conn);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+								mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
+								editor = mSharedPref.edit();
+								editor.putStringSet(Const.PREF_LOGINFRIENDS, friendsList);
+								editor.commit();
+								
+								mDialog.cancel();
+								
+								Intent i = new Intent(LoginActivity.this, MainActivity.class);
+								startActivity(i);
+								finish();
+							}
+						}).start();
 					}
 				}).executeAsync();
             }

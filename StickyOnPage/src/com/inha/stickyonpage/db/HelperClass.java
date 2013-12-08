@@ -53,8 +53,8 @@ public class HelperClass {
         int a = sticky.getLike();
         int b = sticky2.getLike();
 
-        return a < b ? -1
-                : a > b ? 1
+        return a < b ? 1
+                : a > b ? -1
                 : 0;
       }
     });

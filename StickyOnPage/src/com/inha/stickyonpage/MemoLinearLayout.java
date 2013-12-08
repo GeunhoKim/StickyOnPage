@@ -1,12 +1,17 @@
 package com.inha.stickyonpage;
 
 import java.sql.Connection;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.inha.stickyonpage.db.DBConnectionModule;
+import com.inha.stickyonpage.db.HelperClass;
 import com.inha.stickyonpage.db.Sticky;
 
 
@@ -28,7 +34,7 @@ public class MemoLinearLayout extends LinearLayout {
 	LinearLayout ll;
 	GridView mGridView;
 	List<Sticky> stickies;
-	
+	MemoAdapter mMemoAdpater;
 	
 	public MemoLinearLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -73,7 +79,9 @@ public class MemoLinearLayout extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				goodOrder.setTextColor(Color.parseColor("#C3FFB8"));
+				dateOrder.setTextColor(Color.parseColor("#ffffff"));
+				getMemoList(2);
 			}
 		});
 		
@@ -83,21 +91,23 @@ public class MemoLinearLayout extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				dateOrder.setTextColor(Color.parseColor("#C3FFB8"));
+				goodOrder.setTextColor(Color.parseColor("#ffffff"));
+				getMemoList(1);
 			}
 		});
 		
 	}
 	
-	public void getMemoList(){
-		new MemoListAsyncTask(false).execute(new Integer[]{0});
+	public void getMemoList(int num){
+		new MemoListAsyncTask(false).execute(new Integer[]{num});
 	}
 	
 	private class MemoListAsyncTask extends AsyncTask<Integer, Integer, Integer>{
 		ProgressDialog mDialog;
 		DBConnectionModule mDBConnectionModule;
 		boolean isDialog;
-
+		
 		MemoListAsyncTask(boolean isDialog){
 			this.isDialog = isDialog;
 		}
@@ -112,18 +122,31 @@ public class MemoLinearLayout extends LinearLayout {
 		protected Integer doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
 			switch(params[0]){
-				case 0: // order by date
+				case 0: // first load
 					Connection conn;
 					try {
+						HashSet<String> friendsList = UserProfile.getInstacne(mContext).getFriendsList();
+						Iterator<String> it = friendsList.iterator();
+						
 						conn = mDBConnectionModule.getConnection();
-						stickies = mDBConnectionModule.getAllStickies(Const.URL, conn);
-			
+						
+						stickies = mDBConnectionModule.getStickies(Const.URL, UserProfile.getInstacne(mContext).getUserId(), conn);
+						while(it.hasNext()) {
+							stickies.addAll(mDBConnectionModule.getStickies(Const.URL, it.next(), conn));
+						}
+						
+						Collections.sort(stickies);
+						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					break;
-				case 1: // order by good
+				case 1: // order by date
+					Collections.sort(stickies);
+					break;
+				case 2: // order by like
+					stickies = HelperClass.sortStickyByLike(stickies);
 					break;
 			}
 			return params[0];
@@ -136,10 +159,17 @@ public class MemoLinearLayout extends LinearLayout {
 				hideProgress();
 			
 			switch(result){
-				case 0: // order by date
-					mGridView.setAdapter(new MemoAdapter(mContext, R.layout.memo, stickies));
+				case 0: 
+					dateOrder.setTextColor(Color.parseColor("#C3FFB8"));
+					goodOrder.setTextColor(Color.parseColor("#ffffff"));
+					mMemoAdpater = new MemoAdapter(mContext, R.layout.memo, stickies);
+					mGridView.setAdapter(mMemoAdpater);
 					break;
-				case 1: // order by good
+				case 1: // order by date
+					mMemoAdpater.notifyDataSetChanged();
+					break;
+				case 2: // order by like
+					mMemoAdpater.notifyDataSetChanged();
 					break;
 			}
 		}
@@ -148,7 +178,7 @@ public class MemoLinearLayout extends LinearLayout {
 			// TODO Auto-generated method stub
 			mDialog = new ProgressDialog(mContext);
 			mDialog.setTitle("Sticky On Page");
-			mDialog.setMessage("Àá½Ã¸¸ ±â´Ù·Á ÁÖ¼¼¿ä");
+			mDialog.setMessage("ìž ì‹œë§Œ ê¸°ë‹¤ë ¤ ì£¼ì„¸ìš”.");
 			mDialog.setCancelable(false);
 			mDialog.show();
 		}

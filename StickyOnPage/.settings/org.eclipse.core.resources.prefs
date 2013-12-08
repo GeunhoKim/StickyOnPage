@@ -1,4 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/com/inha/stickyonpage/MainActivity.java=UTF-8
+<<<<<<< HEAD
 encoding//src/com/inha/stickyonpage/MemoCRUDActivity.java=UTF-8
+=======
+>>>>>>> 189f4713610afc1326f8b985131eadb7f5b22b49
 encoding//src/com/inha/stickyonpage/db/DBConnectionModule.java=UTF-8
+encoding/<project>=UTF-8

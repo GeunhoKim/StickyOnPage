@@ -1,5 +1,6 @@
 package com.inha.stickyonpage;
 
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -31,7 +32,7 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 	}
 	
 	public void init(){
-		stickies.add(0, new Sticky("", "", "", "", null, 0));
+		stickies.add(0, new Sticky("", "", "", "", new Date(Long.MAX_VALUE), Integer.MAX_VALUE));
 	}
 
 	@Override
@@ -45,19 +46,27 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 		memo_contents = (TextView)convertView.findViewById(R.id.memo);
 		memo_info = (TextView)convertView.findViewById(R.id.memo_info);
 		
+		float ratio = (float) stickies.get(position).getLike() / (float)10;
+		if(ratio > 1) ratio = 1; 
+		int red = (int) (Color.red(Color.parseColor("#FFE87F")) * ratio  +  Color.red(Color.parseColor("#FFFFBF")) * (1-ratio));
+		int green = (int) (Color.green(Color.parseColor("#FFE87F")) * ratio + Color.green(Color.parseColor("#FFFFBF")) * (1-ratio));
+		int blue = (int) (Color.blue(Color.parseColor("#FFE87F")) * ratio + Color.blue(Color.parseColor("#FFFFBF")) * (1-ratio));
+		
+		
 		if(position == 0){
+			convertView.setBackgroundColor(Color.parseColor("#FFFFBF"));
 			memo_info.setText(null);
 			memo_contents.setTextSize(70);
 			memo_contents.setGravity(Gravity.CENTER);
 			memo_contents.setText("+");
 		} else if(position % 4 == 1 || position % 4 == 2) {
-			convertView.setBackgroundColor(Color.parseColor("#F9FFB8"));
+			convertView.setBackgroundColor(Color.rgb(red, green, blue));
 			memo_info.setText(makeTitle(position));
 			memo_contents.setText(makeContent(position));
 			memo_contents.setTextSize(15);
 			memo_contents.setGravity(Gravity.TOP);
 		} else {
-			convertView.setBackgroundColor(Color.parseColor("#f9f74a"));
+			convertView.setBackgroundColor(Color.rgb(red, green, blue));
 			memo_info.setText(makeTitle(position));
 			memo_contents.setText(makeContent(position));
 			memo_contents.setTextSize(15);
@@ -78,9 +87,7 @@ public class MemoAdapter extends ArrayAdapter<Sticky> {
 	}
 	
 	private String makeContent(int position) {
-		StringBuffer sb = new StringBuffer();
-		sb.append(stickies.get(position).getMemo());
-		
+		StringBuffer sb = new StringBuffer(stickies.get(position).getMemo());		
 		return sb.toString();
 	}
 
