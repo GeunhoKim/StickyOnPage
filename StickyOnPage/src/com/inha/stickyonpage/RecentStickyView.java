@@ -54,9 +54,8 @@ public class RecentStickyView extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.recentsticky_list, container, false);
-		getRecentStickyAsyncTask(); // moved from main activity
+		getRecentStickyAsyncTask();
 		
-		//mContext = getActivity();
 		mActivity = getActivity();
 		mContext = getActivity().getApplicationContext();
 		
@@ -64,7 +63,6 @@ public class RecentStickyView extends Fragment {
 		
 		// Set action bar
 		setHasOptionsMenu(true);
-		//ActionBar mActionBar = ((Activity)mContext).getActionBar();
 		ActionBar mActionBar = (mActivity).getActionBar();
 		mActionBar.setDisplayShowTitleEnabled(false);
 		
