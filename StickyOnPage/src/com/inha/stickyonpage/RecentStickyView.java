@@ -47,17 +47,17 @@ public class RecentStickyView extends Fragment {
 	private ListView mListView;
 	private ScrollView mScrollView;
 	private List<Sticky> mStickyList;
-	private EditText mText;
-	private TextView mNoFriend;
+	private EditText mUrl;
+	private TextView mNoFriend, mStatistics;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.recentsticky_list, container, false);
-		getRecentStickyAsyncTask();
 		
 		mActivity = getActivity();
 		mContext = getActivity().getApplicationContext();
+		getRecentStickyAsyncTask();
 		
 		Const.URL = Const.HOME_URL;
 		
@@ -68,6 +68,7 @@ public class RecentStickyView extends Fragment {
 		
 		// Set list view
 		mNoFriend = (TextView)view.findViewById(R.id.scroll_text);
+		mStatistics = (TextView)view.findViewById(R.id.scroll_statistics);
 		
 		mScrollView = (ScrollView)view.findViewById(R.id.scroll_view);
 		mListView = (ListView)view.findViewById(R.id.list_view);
@@ -85,8 +86,8 @@ public class RecentStickyView extends Fragment {
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				TextView memoText = (TextView)view.findViewById(R.id.memo_textview);
-				TextView urlText = (TextView)view.findViewById(R.id.url_textview);
+				//TextView memoText = (TextView)view.findViewById(R.id.memo_textview);
+				//TextView urlText = (TextView)view.findViewById(R.id.url_textview);
 				
 				Intent i = new Intent(mContext, MemoCRUDActivity.class);
 				i.putExtra(Const.MEMO_POSITION, 1);
@@ -121,12 +122,12 @@ public class RecentStickyView extends Fragment {
 		inflater.inflate(R.menu.recentsticky_menu, menu);
 		
 		View mView = menu.findItem(R.id.recent_search).getActionView();
-		mText = (EditText)mView.findViewById(R.id.recent_actionview_url);
+		mUrl = (EditText)mView.findViewById(R.id.recent_actionview_url);
 		mButton = (Button)mView.findViewById(R.id.recent_actionview_button);
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String url = mText.getText().toString();
+				String url = mUrl.getText().toString();
 				BrowsingWebView browsingFragment = new BrowsingWebView();
 				
 				if (!url.equals("")) {
@@ -165,7 +166,9 @@ public class RecentStickyView extends Fragment {
 	private class RecentStickyAsyncTask extends AsyncTask<Integer, Integer, Integer>{
 		ProgressDialog mDialog;
 		DBConnectionModule mDBConnectionModule;
+		UserProfile mProfile;
 		boolean isDialog;
+		int myStickyCount, stickyCount, urlCount;
 		
 		RecentStickyAsyncTask(boolean isDialog){
 			this.isDialog = isDialog;
@@ -173,32 +176,40 @@ public class RecentStickyView extends Fragment {
 		
 		protected void onPreExecute() {
 			mDBConnectionModule = DBConnectionModule.getInstance();
+			mProfile = UserProfile.getInstacne(mContext);
 			
 			if (isDialog) {
 				showProgress();
 			}
 		};
 		
-		/**
-		 * Get sticky list from DBConnectionModule in background
-		 */
 		@Override
 		protected Integer doInBackground(Integer... params) {
 			Connection conn;
-			HashSet<String> friendsList = UserProfile.getInstacne(mContext).getFriendsList();
-			mStickyList = new ArrayList<Sticky>(); // init
+			HashSet<String> friendsList = mProfile.getFriendsList();
+			mStickyList = new ArrayList<Sticky>();
 			
 			try {
 				conn = mDBConnectionModule.getConnection();
-				
 				Iterator<String> iterator = friendsList.iterator();
 				
+				// Get sticky list. Friends' and mine will be included
+				Sticky sticky = mDBConnectionModule.getLatestSticky(mProfile.getUserId(), conn);
+				if (sticky != null) {
+					mStickyList.add(sticky);
+				}
+				
 				while (iterator.hasNext()) {
-					Sticky sticky = mDBConnectionModule.getLatestSticky(iterator.next(), conn);
+					sticky = mDBConnectionModule.getLatestSticky(iterator.next(), conn);
 					if (sticky != null) {
 						mStickyList.add(sticky);
 					}
 				}
+				
+				// Set statistics
+				myStickyCount = mDBConnectionModule.getUserStickyCount(mProfile.getUserId(), conn);
+				stickyCount = mDBConnectionModule.getCFCount("Sticky", conn);
+				urlCount = mDBConnectionModule.getCFCount("URL", conn);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -221,6 +232,31 @@ public class RecentStickyView extends Fragment {
 				mListView.setVisibility(View.INVISIBLE);
 				mNoFriend.setVisibility(View.VISIBLE);
 			}
+			
+			mStatistics.setText(setStatistics(myStickyCount, stickyCount, urlCount));
+		}
+		
+		private String setStatistics(int myStickyCount, int stickyCount, int urlCount) {
+			String str = "";
+			if (myStickyCount > 1) {
+				str += "You've made " + myStickyCount + " stickies.\n";
+			} else {
+				str += "You've made " + myStickyCount + " sticky.\n";
+			}
+			
+			if (stickyCount > 1) {
+				str += stickyCount + " stickies spread over ";
+			} else {
+				str += stickyCount + " sticky spreads over ";
+			}
+			
+			if (urlCount > 1) {
+				str += urlCount + " pages.";
+			} else {
+				str +=urlCount + " page.";
+			}
+			
+			return str;
 		}
 		
 		private void showProgress() {
