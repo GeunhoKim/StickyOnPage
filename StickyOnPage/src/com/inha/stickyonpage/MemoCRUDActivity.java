@@ -2,15 +2,12 @@ package com.inha.stickyonpage;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.StringTokenizer;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -127,8 +124,8 @@ public class MemoCRUDActivity extends Activity {
 				case 0: // Create Memo
 					try {
 						String text = mEditText.getText().toString();
-						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
-						String name = UserProfile.getInstacne(getApplicationContext()).getUserName();
+						String id = UserProfile.getInstance(getApplicationContext()).getUserId();
+						String name = UserProfile.getInstance(getApplicationContext()).getUserName();
 						Connection conn = mDBConnectionModule.getConnection();
 						mDBConnectionModule.writeSticky(Const.URL, id, text, name, conn);
 						
@@ -161,7 +158,7 @@ public class MemoCRUDActivity extends Activity {
 				case 4: // Good Memo
 					try {
 						Connection conn = mDBConnectionModule.getConnection();
-						String id = UserProfile.getInstacne(getApplicationContext()).getUserId();
+						String id = UserProfile.getInstance(getApplicationContext()).getUserId();
 						Long created = sticky.getTimestamp().getTime();
 						isGood = mDBConnectionModule.addPreference(id, sticky.getUserID(), Const.URL, created, conn);
 					} catch (Exception e) {

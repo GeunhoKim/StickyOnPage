@@ -1,7 +1,6 @@
 package com.inha.stickyonpage;
 
 import java.sql.Connection;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,7 +25,6 @@ import com.inha.stickyonpage.db.DBConnectionModule;
 import com.inha.stickyonpage.db.HelperClass;
 import com.inha.stickyonpage.db.Sticky;
 
-
 public class MemoLinearLayout extends LinearLayout {
 
 	Context mContext;
@@ -38,18 +36,15 @@ public class MemoLinearLayout extends LinearLayout {
 	
 	public MemoLinearLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		init(context);
 	}
 	
 	public MemoLinearLayout(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 		init(context);
 	}
 	
 	public void init(Context context) {
-		
 		mContext = context;
 		String infService = mContext.LAYOUT_INFLATER_SERVICE;
 		LayoutInflater li = (LayoutInflater) mContext.getSystemService(infService);
@@ -107,12 +102,16 @@ public class MemoLinearLayout extends LinearLayout {
 		ProgressDialog mDialog;
 		DBConnectionModule mDBConnectionModule;
 		boolean isDialog;
+		TextView mStickyCount;
 		
 		MemoListAsyncTask(boolean isDialog){
 			this.isDialog = isDialog;
 		}
 		
 		protected void onPreExecute() {
+			Activity browsingActivity = BrowsingWebView.getBrowserActivity();
+			mStickyCount = (TextView)browsingActivity.findViewById(R.id.browser_sticky_count);
+
 			mDBConnectionModule = DBConnectionModule.getInstance();
 			if(isDialog)
 				showProgress();
@@ -120,21 +119,19 @@ public class MemoLinearLayout extends LinearLayout {
 		
 		@Override
 		protected Integer doInBackground(Integer... params) {
-			// TODO Auto-generated method stub
 			switch(params[0]){
 				case 0: // first load
 					Connection conn;
 					try {
-						HashSet<String> friendsList = UserProfile.getInstacne(mContext).getFriendsList();
+						HashSet<String> friendsList = UserProfile.getInstance(mContext).getFriendsList();
 						Iterator<String> it = friendsList.iterator();
 						
 						conn = mDBConnectionModule.getConnection();
 						
-						stickies = mDBConnectionModule.getStickies(Const.URL, UserProfile.getInstacne(mContext).getUserId(), conn);
+						stickies = mDBConnectionModule.getStickies(Const.URL, UserProfile.getInstance(mContext).getUserId(), conn);
 						while(it.hasNext()) {
 							stickies.addAll(mDBConnectionModule.getStickies(Const.URL, it.next(), conn));
 						}
-						
 						Collections.sort(stickies);
 						
 					} catch (Exception e) {
@@ -154,7 +151,8 @@ public class MemoLinearLayout extends LinearLayout {
 	
 		@Override
 		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
+			mStickyCount.setText(String.valueOf(stickies.size()));
+			
 			if(isDialog)
 				hideProgress();
 			

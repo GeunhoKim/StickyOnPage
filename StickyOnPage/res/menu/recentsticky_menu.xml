@@ -3,17 +3,18 @@
     
     <item android:id="@+id/recent_search"
         android:icon="@drawable/ic_action_web_site"
-        android:showAsAction="ifRoom|collapseActionView"
+        android:showAsAction="always|collapseActionView"
         android:title="@string/recent_search_str"
         android:actionLayout="@layout/recentsticky_action_view" />
-    <!--
-    <item android:id="@+id/recent_search"
-        android:icon="@drawable/ic_action_search"
+
+    <item android:id="@+id/recent_logout"
+        android:icon="@drawable/ic_action_accounts"
         android:showAsAction="ifRoom"
-        android:title="@string/recent_search_str" />
-    -->
+        android:title="@string/recent_logout_str" />
+    <!--
     <item android:id="@+id/recent_overflow"
         android:icon="@drawable/ic_action_overflow"
         android:showAsAction="ifRoom"
         android:title="@string/recent_overflow_str" />
+    -->
 </menu>
