@@ -55,7 +55,8 @@ public class BrowsingWebView extends Fragment {
 			@Override
 			public void onClick(View v) {
 				String url = mText.getText().toString();
-				if (!url.equals("") && !url.startsWith("http://")) {
+				if (!url.equals("")) {
+					if(!url.startsWith("http://"))
 						url = "http://" + url;
 				} else {
 					url = Const.URL;
