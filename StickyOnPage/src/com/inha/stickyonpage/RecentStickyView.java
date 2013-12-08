@@ -144,6 +144,19 @@ public class RecentStickyView extends Fragment {
 			}
 		});
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.recent_logout:
+			Intent i = new Intent(mContext, LoginActivity.class);
+			startActivity(i);
+			mActivity.finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 
 	public void getRecentStickyAsyncTask(){
 		new RecentStickyAsyncTask(false).execute(new Integer[]{0});

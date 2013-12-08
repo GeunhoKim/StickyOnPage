@@ -1,19 +1,12 @@
 package com.inha.stickyonpage;
 
-import java.sql.Connection;
-
-import com.inha.stickyonpage.db.DBConnectionModule;
-
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,8 +32,12 @@ public class BrowsingWebView extends Fragment {
 	Button mButton;
 	EditText mText;
 	TextView mStickyCount;
-	Activity mActivity;
+	static Activity mActivity = null;
 	DrawerLayout mDrawerLayout;
+	
+	public static Activity getBrowserActivity() {
+		return mActivity;
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,9 +74,6 @@ public class BrowsingWebView extends Fragment {
 		    	Const.URL = url;
 		    	((MemoLinearLayout) getActivity().findViewById(R.id.drawer_left)).getMemoList(0);
 		    	mText.setText(url);
-		    	
-			   	// Set sticky count
-				new BrowsingAsyncTask().execute(url);
 		    }
 		    
 		    @Override
@@ -183,30 +177,4 @@ public class BrowsingWebView extends Fragment {
 		   		return super.onOptionsItemSelected(item);
 	   	}
     }
-	
-	private class BrowsingAsyncTask extends AsyncTask<String, Integer, Integer> {
-		private DBConnectionModule mDBConnectionModule;
-		private int stickyCount;
-		
-		protected void onPreExecute() {
-			mDBConnectionModule = DBConnectionModule.getInstance();
-		}
-		
-		@Override
-		protected Integer doInBackground(String... arg0) {
-			Connection conn;
-			try {
-				conn = mDBConnectionModule.getConnection();
-				stickyCount = mDBConnectionModule.getURLStickyCount(arg0[0], conn);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return stickyCount;
-		}
-		
-		@Override
-		protected void onPostExecute(Integer result) {
-			mStickyCount.setText(result.toString());
-		}
-	}
 }
