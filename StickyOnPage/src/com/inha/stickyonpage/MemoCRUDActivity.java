@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -194,7 +195,7 @@ public class MemoCRUDActivity extends Activity {
 					finish();
 					break;
 				case 4: // Good Memo
-					Toast.makeText(MemoCRUDActivity.this, "이 스티키를 추천하였습니다.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MemoCRUDActivity.this, "���ㅽ떚�ㅻ� 異붿쿇�섏��듬땲��", Toast.LENGTH_SHORT).show();
 					break;
 			}
 		}
@@ -203,7 +204,7 @@ public class MemoCRUDActivity extends Activity {
 			// TODO Auto-generated method stub
 			mDialog = new ProgressDialog(MemoCRUDActivity.this);
 			mDialog.setTitle("Sticky On Page");
-			mDialog.setMessage("잠시만 기다려주세요.");
+			mDialog.setMessage("�좎떆留�湲곕떎�ㅼ＜�몄슂.");
 			mDialog.setCancelable(false);
 			mDialog.show();
 		}

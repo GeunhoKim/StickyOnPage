@@ -10,7 +10,7 @@ public class UserProfile {
 	private String userId;
 	private String userName;
 	private String loginStatus;
-	private HashSet<String> friendsList; 
+	private HashSet<String> friendsList;
 	
 	private static UserProfile instance; 
 	
