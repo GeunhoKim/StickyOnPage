@@ -69,4 +69,9 @@ public class UserProfile {
 		return "UserProfile [userId=" + userId + ", userName=" + userName
 				+ ", loginStatus=" + loginStatus + "]";
 	}
+
+	public void initialize() {
+		// TODO Auto-generated method stub
+		instance = null;
+	}
 }

@@ -17,7 +17,10 @@
 package com.inha.stickyonpage;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,9 +30,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.View;
 import android.webkit.WebView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -39,7 +40,19 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
 public class MainActivity extends FragmentActivity {
-    
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			String action = intent.getAction();
+			if(action.equals("Finish")) {
+				finish();
+			}
+		}
+	};
+	
+	
     DrawerLayout mDrawerLayout;
     FrameLayout mFrameLayout;
     MemoLinearLayout mMemoLinearLayout;
@@ -69,6 +82,8 @@ public class MainActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        registerReceiver(mReceiver, new IntentFilter("Finish"));
+        
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
 
@@ -131,6 +146,8 @@ public class MainActivity extends FragmentActivity {
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+        
+        unregisterReceiver(mReceiver);
     }
 
     @Override

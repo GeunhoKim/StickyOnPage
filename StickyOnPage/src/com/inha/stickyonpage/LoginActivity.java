@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Request;
@@ -56,6 +57,8 @@ public class LoginActivity extends Activity {
 	String verifier;
 	SharedPreferences mSharedPref;
 	SharedPreferences.Editor editor;
+	TextView message;
+	Button twitterBtn;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +70,61 @@ public class LoginActivity extends Activity {
 		uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
 		
-        Button twitterBtn = (Button)findViewById(R.id.login_button_twitter);
-        twitterBtn.setOnClickListener(new OnClickListener() {	
+        twitterBtn = (Button)findViewById(R.id.login_button_twitter);
+        message = (TextView)findViewById(R.id.profile_name);
+               
+        
+        mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
+        editor = mSharedPref.edit();
+       
+        String loginStatus = mSharedPref.getString(Const.PREF_LOGINSTATUS, "");
+        
+        if(loginStatus.equals("Facebook")) {
+        	twitterBtn.setVisibility(View.GONE);
+        	twitterBtn.setOnClickListener(new OnClickListener() {	
+    			@Override
+    			public void onClick(View v) {
+    				loginToTwitter();
+    			}
+            });
+        	message.setText(R.string.logout_message);
+        	
+        } else if(loginStatus.equals("Twitter")) {
+        	findViewById(R.id.login_button_facebook).setVisibility(View.GONE);
+        	twitterBtn.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					logoutToTwitter();
+				}
+			});
+        	message.setText(R.string.logout_message);
+        	
+        } else {
+        	twitterBtn.setOnClickListener(new OnClickListener() {	
+    			@Override
+    			public void onClick(View v) {
+    				loginToTwitter();
+    			}
+            });
+        }
+	}
+	
+	public void logoutToTwitter() {
+		editor.clear().commit();
+		UserProfile.getInstance(this).initialize();
+		
+		findViewById(R.id.login_button_facebook).setVisibility(View.VISIBLE);
+		message.setText(R.string.login_get_started);
+		twitterBtn.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) {
 				loginToTwitter();
 			}
         });
+		
+		sendBroadcast(new Intent("Finish"));
 	}
 	
 	public void loginToTwitter(){
@@ -139,8 +190,6 @@ public class LoginActivity extends Activity {
 				e.printStackTrace();
 			}
 			
-			mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
-			editor = mSharedPref.edit();
 			editor.putString(Const.PREF_KEY_OAUTH_TOKEN, at.getToken());
 			editor.putString(Const.PREF_KEY_OAUTH_SECRET, at.getTokenSecret());
 			editor.putString(Const.PREF_LOGINSTATUS, "Twitter");
@@ -205,7 +254,7 @@ public class LoginActivity extends Activity {
 	
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		if(isResumed){
-			if (state.equals(SessionState.OPENED)) {
+			if (state.isOpened()) {
 				
 				mDialog = new ProgressDialog(LoginActivity.this);
 				mDialog.setTitle("Sticky On Page");
@@ -219,8 +268,6 @@ public class LoginActivity extends Activity {
 					public void onCompleted(GraphUser user, Response response) {
 						final GraphUser mUser = user; 
 						// TODO Auto-generated method stub
-						mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
-						editor = mSharedPref.edit();
 						editor.putString(Const.PREF_LOGINSTATUS, "Facebook");
 						editor.putString(Const.PREF_LOGINID, "F"+user.getId());
 						editor.putString(Const.PREF_LOGINNAME, user.getUsername());
@@ -268,8 +315,6 @@ public class LoginActivity extends Activity {
 									e.printStackTrace();
 								}
 								
-								mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
-								editor = mSharedPref.edit();
 								editor.putStringSet(Const.PREF_LOGINFRIENDS, friendsList);
 								editor.commit();
 								
@@ -282,6 +327,14 @@ public class LoginActivity extends Activity {
 						}).start();
 					}
 				}).executeAsync();
+            } else if (state.isClosed()) {
+            	editor.clear().commit();
+        		UserProfile.getInstance(this).initialize();
+        		
+        		findViewById(R.id.login_button_twitter).setVisibility(View.VISIBLE);
+        		message.setText(R.string.login_get_started);
+        		
+        		sendBroadcast(new Intent("Finish"));
             }
 		}
     }

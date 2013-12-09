@@ -148,7 +148,6 @@ public class RecentStickyView extends Fragment {
 		case R.id.recent_logout:
 			Intent i = new Intent(mContext, LoginActivity.class);
 			startActivity(i);
-			mActivity.finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
