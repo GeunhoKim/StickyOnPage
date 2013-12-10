@@ -2,18 +2,24 @@ package com.inha.stickyonpage;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -24,12 +30,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class BrowsingWebView extends Fragment {
 
 	ActionBar mActionBar;
 	WebView mWebView;
-	Button mButton;
+	Button mButton, mCancelButton;
 	EditText mText;
 	TextView mStickyCount;
 	static Activity mActivity = null;
@@ -47,21 +54,42 @@ public class BrowsingWebView extends Fragment {
 		
 		mActivity = getActivity();
 		mDrawerLayout = (DrawerLayout)mActivity.findViewById(R.id.drawer_layout);
-		
 		mStickyCount = (TextView)view.findViewById(R.id.browser_sticky_count);
-		mText = (EditText)view.findViewById(R.id.browser_url);
 		mButton = (Button)view.findViewById(R.id.browser_button);
+		mCancelButton = (Button)view.findViewById(R.id.browser_cancel);
+		mText = (EditText)view.findViewById(R.id.browser_url);
+		
+		mText.setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				// Load url when ENTER is pressed
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					loadURL();
+					return true;
+				}
+				
+				return false;
+			}
+		});
+		mText.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				mCancelButton.setVisibility(View.VISIBLE);
+				mCancelButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						mText.setText("");
+					}
+				});
+				
+				return false;
+			}
+		});
+		
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String url = mText.getText().toString();
-				if (!url.equals("")) {
-					if(!url.startsWith("http://"))
-						url = "http://" + url;
-				} else {
-					url = Const.URL;
-				}
-				mWebView.loadUrl(url);
+				loadURL();
 			}
 		});
 		
@@ -87,7 +115,7 @@ public class BrowsingWebView extends Fragment {
 		WebSettings mSettings = mWebView.getSettings();
 		mSettings.setJavaScriptEnabled(true);
 		
-		// Set up URL to load
+		// Set up the first URL to load
 		String url = Const.URL;
 		Bundle bundle = this.getArguments();
 
@@ -140,6 +168,23 @@ public class BrowsingWebView extends Fragment {
 		});
 		
 		return view;
+	}
+	
+	private void loadURL() {
+		InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(mText.getWindowToken(),0);
+		
+		String url = mText.getText().toString();
+		if (!url.equals("")) {
+			if(!url.startsWith("http://"))
+				url = "http://" + url;
+		} else {
+			url = Const.URL;
+		}
+		
+		mText.clearFocus();
+		mCancelButton.setVisibility(View.INVISIBLE); // invisible
+		mWebView.loadUrl(url);
 	}
 	
 	@Override

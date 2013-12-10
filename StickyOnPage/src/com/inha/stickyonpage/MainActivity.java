@@ -40,24 +40,10 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
 public class MainActivity extends FragmentActivity {
-    BroadcastReceiver mReceiver = new BroadcastReceiver() {
-		
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			// TODO Auto-generated method stub
-			String action = intent.getAction();
-			if(action.equals("Finish")) {
-				finish();
-			}
-		}
-	};
-	
-	
+
     DrawerLayout mDrawerLayout;
     FrameLayout mFrameLayout;
     MemoLinearLayout mMemoLinearLayout;
-    private ActionBar mActionBar;
-    private Intent mIntent;
 
     private boolean isResumed = false;
     private UiLifecycleHelper uiHelper;
@@ -82,8 +68,6 @@ public class MainActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        registerReceiver(mReceiver, new IntentFilter("Finish"));
-        
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
 
@@ -98,19 +82,8 @@ public class MainActivity extends FragmentActivity {
         mMemoLinearLayout = (MemoLinearLayout)findViewById(R.id.drawer_left);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//		mIntent = getIntent();
-//		if (mIntent.hasExtra(Const.MEMO_URL_FROM_MEMO_READ)) { // when MainActivity is called from MemoCRUDActivity
-//			String url = mIntent.getStringExtra(Const.MEMO_URL_FROM_MEMO_READ);
-//			Bundle bundle = new Bundle();
-//			bundle.putString(Const.MEMO_URL_FROM_MEMO_READ, url);
-//			
-//			BrowsingWebView browsingFragment = new BrowsingWebView();
-//			browsingFragment.setArguments(bundle);
-//			ft.replace(R.id.drawer_main, browsingFragment, "BrowsingWebView");
-//		} else {
 		RecentStickyView stickyFragment = new RecentStickyView();
 		ft.add(R.id.drawer_main, stickyFragment, "RecentStickyView");
-//		}
         ft.commit();
     }
 
@@ -146,8 +119,6 @@ public class MainActivity extends FragmentActivity {
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
-        
-        unregisterReceiver(mReceiver);
     }
 
     @Override
