@@ -203,7 +203,7 @@ public class MemoCRUDActivity extends Activity {
 			// TODO Auto-generated method stub
 			mDialog = new ProgressDialog(MemoCRUDActivity.this);
 			mDialog.setTitle("Sticky On Page");
-			mDialog.setMessage("�좎떆留�湲곕떎�ㅼ＜�몄슂.");
+			mDialog.setMessage("잠시만 기다려 주세요.");
 			mDialog.setCancelable(false);
 			mDialog.show();
 		}
