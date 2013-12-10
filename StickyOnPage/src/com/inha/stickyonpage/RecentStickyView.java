@@ -6,19 +6,24 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import com.facebook.Session;
 import com.inha.stickyonpage.db.DBConnectionModule;
 import com.inha.stickyonpage.db.Sticky;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +48,8 @@ public class RecentStickyView extends Fragment {
 	private ListView mListView;
 	private ScrollView mScrollView;
 	private List<Sticky> mStickyList;
+	private SharedPreferences mSharedPref;
+	SharedPreferences.Editor mEditor;
 	private EditText mUrl;
 	private TextView mNoFriend, mStatistics;
 	
@@ -56,6 +63,9 @@ public class RecentStickyView extends Fragment {
 		getRecentStickyAsyncTask();
 		
 		Const.URL = Const.HOME_URL;
+		
+		mSharedPref = mActivity.getSharedPreferences(Const.PREFERENCE, mContext.MODE_PRIVATE);
+        mEditor = mSharedPref.edit();
 		
 		// Set action bar
 		setHasOptionsMenu(true);
@@ -146,9 +156,32 @@ public class RecentStickyView extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.recent_logout:
-			Intent i = new Intent(mContext, LoginActivity.class);
-			startActivity(i);
-			return true;
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setMessage("Do you want to logout?")
+	               .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   String loginStatus = UserProfile.getInstance(mContext).getLoginStatus();
+	                	   if (loginStatus.equals("Facebook") || loginStatus.equals("Twitter")) {
+	                		   Session openSession = Session.getActiveSession();
+	                		   if (openSession != null) {
+	                			   openSession.closeAndClearTokenInformation();
+	                		   }
+	                		   
+	                		   mEditor.clear().commit();
+	                		   UserProfile.getInstance(mContext).initialize();
+	                		   Intent i = new Intent(mContext, LoginActivity.class);
+	           				   (mActivity).startActivity(i);
+	                	   }
+	                   }
+	               })
+	               .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       // User cancelled the dialog
+	                   }
+	               });
+	        AlertDialog dialog = builder.create();
+	        dialog.show();
+	        
 		default:
 			return super.onOptionsItemSelected(item);
 		}

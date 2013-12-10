@@ -11,10 +11,5 @@
         android:icon="@drawable/ic_action_accounts"
         android:showAsAction="ifRoom"
         android:title="@string/recent_logout_str" />
-    <!--
-    <item android:id="@+id/recent_overflow"
-        android:icon="@drawable/ic_action_overflow"
-        android:showAsAction="ifRoom"
-        android:title="@string/recent_overflow_str" />
-    -->
+
 </menu>

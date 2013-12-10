@@ -34,7 +34,7 @@ import com.inha.stickyonpage.db.DBConnectionModule;
 
 public class LoginActivity extends Activity {
 	
-	ProgressDialog mDialog;
+	private ProgressDialog mDialog;
 	
 	// Facebook variable
 	private UiLifecycleHelper uiHelper;
@@ -47,8 +47,7 @@ public class LoginActivity extends Activity {
     
     private boolean isResumed = false;
     HashSet<String> friendsList = new HashSet<String>();
-    
-    
+ 
 	// Twitter variable
 	Twitter twitter;
 	ConfigurationBuilder builder;
@@ -59,10 +58,9 @@ public class LoginActivity extends Activity {
 	SharedPreferences.Editor editor;
 	TextView message;
 	Button twitterBtn;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 
@@ -71,60 +69,17 @@ public class LoginActivity extends Activity {
         uiHelper.onCreate(savedInstanceState);
 		
         twitterBtn = (Button)findViewById(R.id.login_button_twitter);
-        message = (TextView)findViewById(R.id.profile_name);
-               
-        
-        mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
-        editor = mSharedPref.edit();
-       
-        String loginStatus = mSharedPref.getString(Const.PREF_LOGINSTATUS, "");
-        
-        if(loginStatus.equals("Facebook")) {
-        	twitterBtn.setVisibility(View.GONE);
-        	twitterBtn.setOnClickListener(new OnClickListener() {	
-    			@Override
-    			public void onClick(View v) {
-    				loginToTwitter();
-    			}
-            });
-        	message.setText(R.string.logout_message);
-        	
-        } else if(loginStatus.equals("Twitter")) {
-        	findViewById(R.id.login_button_facebook).setVisibility(View.GONE);
-        	twitterBtn.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					logoutToTwitter();
-				}
-			});
-        	message.setText(R.string.logout_message);
-        	
-        } else {
-        	twitterBtn.setOnClickListener(new OnClickListener() {	
-    			@Override
-    			public void onClick(View v) {
-    				loginToTwitter();
-    			}
-            });
-        }
-	}
-	
-	public void logoutToTwitter() {
-		editor.clear().commit();
-		UserProfile.getInstance(this).initialize();
-		
-		findViewById(R.id.login_button_facebook).setVisibility(View.VISIBLE);
-		message.setText(R.string.login_get_started);
-		twitterBtn.setOnClickListener(new OnClickListener() {	
+        twitterBtn.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) {
 				loginToTwitter();
 			}
         });
-		
-		sendBroadcast(new Intent("Finish"));
+        
+        message = (TextView)findViewById(R.id.profile_name);
+        
+        mSharedPref = getSharedPreferences(Const.PREFERENCE, MODE_PRIVATE);
+        editor = mSharedPref.edit();
 	}
 	
 	public void loginToTwitter(){
@@ -327,14 +282,6 @@ public class LoginActivity extends Activity {
 						}).start();
 					}
 				}).executeAsync();
-            } else if (state.isClosed()) {
-            	editor.clear().commit();
-        		UserProfile.getInstance(this).initialize();
-        		
-        		findViewById(R.id.login_button_twitter).setVisibility(View.VISIBLE);
-        		message.setText(R.string.login_get_started);
-        		
-        		sendBroadcast(new Intent("Finish"));
             }
 		}
     }
