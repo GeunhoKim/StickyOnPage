@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">Sticky\nOn Page</string>
-    <string name="app_id">537011096374026</string>  
-    <!-- <string name="app_id">421390317961031</string>-->
+    <!-- <string name="app_id">537011096374026</string> -->  
+    <string name="app_id">421390317961031</string>
     
     <string name="login_app_name">Sticky on Page</string>
     <string name="login_get_started">To get started,\nlogin using Facebook or Twitter</string>
